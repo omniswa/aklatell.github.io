@@ -4,66 +4,8 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	
-	<!-- Critical CSS inlined for faster FCP -->
-	<style>
-		:root {
-			--bg-body: #f8f9fa;
-			--bg-card: #fff;
-			--text-primary: #2c3e50;
-			--text-secondary: #6c757d;
-			--accent: #e67e22;
-			--border: #e9ecef
-		}
-		
-		body.dark-mode {
-			--bg-body: #121212;
-			--bg-card: #1e1e1e;
-			--text-primary: #e0e0e0;
-			--text-secondary: #a0a0a0;
-			--border: #333
-		}
-		
-		* {
-			box-sizing: border-box;
-			margin: 0;
-			padding: 0
-		}
-		
-		body {
-			font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-			background: var(--bg-body);
-			color: var(--text-primary);
-			line-height: 1.6
-		}
-		
-		.navbar {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			padding: 1rem 1.5rem;
-			background: var(--bg-card);
-			border-bottom: 1px solid var(--border);
-			position: sticky;
-			top: 0;
-			z-index: 100
-		}
-		
-		.books-grid {
-			display: grid;
-			padding: 1.5rem;
-			grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-			gap: 1.5rem;
-			min-height: 400px
-		}
-		
-		.loading {
-			grid-column: 1/-1;
-			text-align: center;
-			padding: 3rem;
-			color: var(--text-secondary)
-		}
-	</style>
+	<link rel="preconnect" href="https://aklatell.pages.dev" crossorigin>
+	<link rel="canonical" href="https://aklatell.pages.dev/">
 	
 	<title>Aklatell - Public Library | Discover Your Next Great Read</title>
 	<meta name="description" content="Browse our extensive collection of fiction, non-fiction, mystery, romance, sci-fi, and fantasy books. Find your next favorite book at Aklatell Public Library.">
@@ -82,12 +24,6 @@
 	<meta name="twitter:card" content="summary_large_image">
 	<meta name="twitter:title" content="Aklatell - Public Library">
 	<meta name="twitter:description" content="Browse our extensive collection of classic books.">
-	
-	<!-- Canonical URL -->
-	<link rel="canonical" href="https://aklatell.pages.dev/">
-	
-	<!-- Preconnect to external domains -->
-	<link rel="preconnect" href="https://aklatell.pages.dev" crossorigin>
 	
 	<!-- Preload critical resources -->
 	<link rel="preload" href="books.json" as="fetch" type="application/json" crossorigin>

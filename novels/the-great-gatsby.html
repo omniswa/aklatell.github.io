@@ -4,7 +4,6 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="preconnect" href="https://aklatell.pages.dev" />
 	
 	<!-- Essential SEO -->
 	<title>The Great Gatsby by F. Scott Fitzgerald — Full Novel (Public Domain) | Aklatell</title>
@@ -13,14 +12,40 @@
 	<meta name="author" content="F. Scott Fitzgerald" />
 	<meta name="robots" content="index, follow" />
 	
-	<!-- Preload critical font & stylesheet -->
 	<link rel="preload" href="../newsreader.woff2" as="font" type="font/woff2" crossorigin>
 	<link rel="preload" href="../novels.css" as="style">
 	<link rel="stylesheet" href="../novels.css">
+	<script>
+		(function() {
+			try {
+				const saved = localStorage.getItem("user-theme");
+				const theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+				document.documentElement.setAttribute("data-theme", theme);
+			} catch (e) {}
+		})();
+	</script>
 	<script src="../novels.js" defer></script>
 </head>
 
 <body>
+	<div id="progressBarContainer">
+		<div id="progressBar" aria-hidden="true"></div>
+	</div>
+	
+	<div class="floating-controls">
+		<button class="control-btn" id="mainControlBtn" aria-label="Menu">☰</button>
+		<div class="control-menu" id="controlMenu" aria-hidden="true">
+			<button class="control-item" id="homeBtn" aria-label="Home">🏠</button>
+			<button class="control-item" id="themeBtn" aria-label="Toggle Theme">
+				<script>
+					document.write(document.documentElement.getAttribute("data-theme") === "dark" ? "☀️" : "🌙")
+				</script>
+			</button>
+		</div>
+	</div>
+	
+	<button id="backToTop" aria-label="Back to Top">↑</button>
+	
 	<main>
 		<section class="chapter" id="halftitlepage" epub:type="halftitlepage frontmatter">
 			<h1 epub:type="fulltitle">The Great Gatsby <br /> by F. Scott Fitzgerald</h1>

@@ -352,6 +352,7 @@ body {
 }
 
 .page-footer {
+  min-height: 120px;
   background: var(--bg-card);
   border-top: 1px solid var(--border);
   padding: 2rem 1.5rem;

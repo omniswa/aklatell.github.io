@@ -28,6 +28,12 @@
 </head>
 
 <body>
+	<div id="restore-toast" class="toast" aria-hidden="true">
+		<span>Picked up where you left off?</span>
+		<button id="restore-btn">Jump to location</button>
+		<button id="close-toast" aria-label="Close">✕</button>
+	</div>
+	
 	<div id="progressBarContainer">
 		<div id="progressBar" aria-hidden="true"></div>
 	</div>
@@ -41,6 +47,7 @@
 					document.write(document.documentElement.getAttribute("data-theme") === "dark" ? "☀️" : "🌙")
 				</script>
 			</button>
+			<button class="control-item" id="resetBtn" aria-label="Reset Progress" title="Start Over">↺</button>
 		</div>
 	</div>
 	

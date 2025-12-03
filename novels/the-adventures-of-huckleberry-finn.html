@@ -4,7 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+	
 	<!-- Essential SEO -->
 	<title>The Adventures of Huckleberry Finn by Mark Twain — Full Novel (Public Domain) | Aklatell</title>
 	<meta name="description" content="Read The Adventures of Huckleberry Finn by Mark Twain — the complete public domain novel on Aklatell. A classic American adventure following Huck Finn and Jim along the Mississippi River." />
@@ -28,6 +28,12 @@
 </head>
 
 <body>
+	<div id="restore-toast" class="toast" aria-hidden="true">
+		<span>Picked up where you left off?</span>
+		<button id="restore-btn">Jump to location</button>
+		<button id="close-toast" aria-label="Close">✕</button>
+	</div>
+	
 	<div id="progressBarContainer">
 		<div id="progressBar" aria-hidden="true"></div>
 	</div>
@@ -41,6 +47,7 @@
 					document.write(document.documentElement.getAttribute("data-theme") === "dark" ? "☀️" : "🌙")
 				</script>
 			</button>
+			<button class="control-item" id="resetBtn" aria-label="Reset Progress" title="Start Over">↺</button>
 		</div>
 	</div>
 	

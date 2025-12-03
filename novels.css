@@ -284,6 +284,82 @@ hr {
   transform: translateY(0) translateZ(0)
 }
 
+/* Toast Notification Styling */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  /* Start hidden below screen */
+  background: var(--bg-secondary);
+  border: 1px solid var(--accent);
+  padding: 0.8rem 1.2rem;
+  border-radius: 50px;
+  box-shadow: 0 4px 20px var(--shadow);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  z-index: 10001;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  width: max-content;
+  max-width: 80vw;
+}
+
+.toast.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.toast span {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.toast #restore-btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.toast #restore-btn:hover {
+  background: var(--accent-hover);
+}
+
+.toast #close-toast {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 4px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+}
+
+.toast #close-toast:hover {
+  color: var(--text-primary);
+}
+
+@media (max-width: 480px) {
+  .toast {
+    flex-wrap: wrap;
+    justify-content: center;
+    border-radius: 12px;
+    bottom: 1rem;
+  }
+}
+
 @media (max-width:640px) {
   #mainControlBtn {
     width: 42px;

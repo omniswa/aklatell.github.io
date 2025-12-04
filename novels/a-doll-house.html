@@ -12,51 +12,19 @@
 	<meta name="author" content="Henrik Ibsen" />
 	<meta name="robots" content="index, follow" />
 	
-	<link rel="preload" href="../newsreader.woff2" as="font" type="font/woff2" crossorigin>
 	<link rel="preload" href="../novels.css" as="style">
 	<link rel="stylesheet" href="../novels.css">
-	<script>
-		(function() {
-			try {
-				const saved = localStorage.getItem("user-theme");
-				const theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-				document.documentElement.setAttribute("data-theme", theme);
-			} catch (e) {}
-		})();
-	</script>
 	<script src="../novels.js" defer></script>
 </head>
 
 <body>
-	<div id="restore-toast" class="toast" aria-hidden="true">
-		<span>Picked up where you left off?</span>
-		<button id="restore-btn">Jump to location</button>
-		<button id="close-toast" aria-label="Close">✕</button>
-	</div>
-	
-	<div id="progressBarContainer">
-		<div id="progressBar" aria-hidden="true"></div>
-	</div>
-	
-	<div class="floating-controls">
-		<button class="control-btn" id="mainControlBtn" aria-label="Menu">☰</button>
-		<div class="control-menu" id="controlMenu" aria-hidden="true">
-			<button class="control-item" id="homeBtn" aria-label="Home">🏠</button>
-			<button class="control-item" id="themeBtn" aria-label="Toggle Theme">
-				<script>
-					document.write(document.documentElement.getAttribute("data-theme") === "dark" ? "☀️" : "🌙")
-				</script>
-			</button>
-			<button class="control-item" id="resetBtn" aria-label="Reset Progress" title="Start Over">↺</button>
-		</div>
-	</div>
-	
-	<button id="backToTop" aria-label="Back to Top">↑</button>
 	
 	<main>
-		<section class="chapter" id="halftitlepage" epub:type="halftitlepage frontmatter">
-			<h1 epub:type="fulltitle">A Doll's House <br /> by Henrik Ibsen</h1>
-		</section>
+		<header style="position: static; transform: none; background: transparent; box-shadow: none; border: none; padding: 0; margin-bottom: 3rem; display: block;">
+			<h1>A Doll's House</h1>
+			<p style="text-align: center; font-style: italic; color: var(--text-muted);">by Henrik Ibsen</p>
+		</header>
+		
 		<div class="chapter">
 			<h2><a id="act01"></a>ACT I</h2>
 			<p>
@@ -5109,6 +5077,7 @@
 			</p>
 		</div><!--end chapter-->
 	</main>
+	
 </body>
 
 </html>

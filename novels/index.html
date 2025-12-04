@@ -2,64 +2,56 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#fafafa">
   
-  <!-- SEO -->
   <title>Aklatell - Public Library | Discover Your Next Great Read</title>
-  <meta name="title" content="Aklatell - Public Library | Discover Your Next Great Read">
   <meta name="description" content="Browse our extensive collection of fiction, non-fiction, mystery, romance, sci-fi, and fantasy books. Find your next favorite book at Aklatell Public Library.">
-  <meta name="keywords" content="library, books, fiction, non-fiction, mystery, romance, sci-fi, fantasy, reading, literature, online library, book collection">
+  <meta name="keywords" content="library, books, fiction, non-fiction, mystery, romance, sci-fi, fantasy, reading, literature, online library, book collection, aklatell">
   <meta name="author" content="Aklatell">
   <meta name="robots" content="index, follow">
-  <meta name="language" content="English">
   
-  <link rel="preload" href="../newsreader.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="../novels.css" as="style">
   <link rel="stylesheet" href="../novels.css">
-  <script>
-    (function() {
-      try {
-        const saved = localStorage.getItem("user-theme");
-        const theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        document.documentElement.setAttribute("data-theme", theme);
-      } catch (e) {}
-    })();
-  </script>
   <script src="../novels.js" defer></script>
 </head>
 
 <body>
-  <div id="restore-toast" class="toast" aria-hidden="true">
-    <span>Picked up where you left off?</span>
-    <button id="restore-btn">Jump to location</button>
-    <button id="close-toast" aria-label="Close">✕</button>
-  </div>
-  
-  <div id="progressBarContainer">
-    <div id="progressBar" aria-hidden="true"></div>
-  </div>
-  
-  <div class="floating-controls">
-    <button class="control-btn" id="mainControlBtn" aria-label="Menu">☰</button>
-    <div class="control-menu" id="controlMenu" aria-hidden="true">
-      <button class="control-item" id="homeBtn" aria-label="Home">🏠</button>
-      <button class="control-item" id="themeBtn" aria-label="Toggle Theme">
-        <script>
-          document.write(document.documentElement.getAttribute("data-theme") === "dark" ? "☀️" : "🌙")
-        </script>
-      </button>
-      <button class="control-item" id="resetBtn" aria-label="Reset Progress" title="Start Over">↺</button>
-    </div>
-  </div>
-  
-  <button id="backToTop" aria-label="Back to Top">↑</button>
+  <div id="progressBar"></div>
   
   <main>
-    <section class="chapter" id="halftitlepage" epub:type="halftitlepage frontmatter">
-      <h1 epub:type="fulltitle">Aklatell Library <br /> Public Domain</h1>
-    </section>
+    <header style="position: static; transform: none; background: transparent; box-shadow: none; border: none; padding: 0; margin-bottom: 3rem; display: block;">
+      <h1>The Importance of Being Earnest</h1>
+      <p style="text-align: center; font-style: italic; color: var(--text-muted);">by Oscar Wilde</p>
+    </header>
   </main>
+  
+  <header>
+    <button class="btn" id="homeBtn" aria-label="Go Home" title="Home">
+      <span id="home">↩️</span>
+    </button>
+    <button class="btn" id="themeToggle" aria-label="Toggle Theme" title="Switch Theme">
+      <span id="themeIcon">☀️</span>
+    </button>
+    <button class="btn" id="fontToggle" aria-label="Adjust Font Size" title="Font Size">
+      <span>Aa</span>
+    </button>
+    <button class="btn" id="shareBtn" aria-label="Share Link" title="Copy Link">
+      <span>🔗</span>
+    </button>
+    <button class="btn" id="resetProgress" aria-label="Reset Progress" title="Reset">
+      <span>🔄</span>
+    </button>
+  </header>
+  
+  <div id="toast">
+    <span id="toastMessage"></span>
+    <div id="toastActions" style="display: none;">
+      <button id="toastYes">Jump</button>
+      <button id="toastNo" style="background: transparent; border: 1px solid rgba(255,255,255,0.3);">Stay</button>
+    </div>
+  </div>
 </body>
 
 </html>

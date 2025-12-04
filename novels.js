@@ -1,193 +1,122 @@
-const elements = {
-  mainControlBtn: null,
-  controlMenu: null,
-  themeBtn: null,
-  homeBtn: null,
-  resetBtn: null,
-  progressBar: null,
-  backToTop: null,
-  toast: null,
-  restoreBtn: null,
-  closeToastBtn: null,
-  html: document.documentElement
-};
-
-// State
-const state = {
-  theme: "light",
-  menuOpen: false,
-  currentParagraphIndex: 0,
-  bookKey: "book-default"
-};
-
-function initTheme() {
-  state.theme = elements.html.getAttribute("data-theme") || "light";
-  if (elements.themeBtn) {
-    elements.themeBtn.textContent = state.theme === "dark" ? "☀️" : "🌙";
-  }
+// DEBOUNCE UTILITY (Crucial for scroll performance)
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
 }
 
-function setTheme(theme) {
-  state.theme = theme;
-  elements.html.setAttribute("data-theme", theme);
-  try { localStorage.setItem("user-theme", theme); } catch (e) {}
-  if (elements.themeBtn) elements.themeBtn.textContent = theme === "dark" ? "☀️" : "🌙";
+const html = document.documentElement;
+const progressBar = document.getElementById('progressBar');
+const toast = document.getElementById('toast');
+const bookId = 'wilde_earnest_v1';
+
+// --- THEME MANAGEMENT (Light -> Sepia -> Dark) ---
+const themes = ['light', 'sepia', 'dark'];
+const icons = { 'light': '☀️', 'sepia': '☕', 'dark': '🌙' };
+let currentThemeIndex = themes.indexOf(localStorage.getItem('theme') || 'light');
+
+function applyTheme(index) {
+  const theme = themes[index];
+  html.setAttribute('data-theme', theme);
+  document.getElementById('themeIcon').textContent = icons[theme];
+  document.querySelector('meta[name="theme-color"]').setAttribute('content',
+    theme === 'dark' ? '#111111' : (theme === 'sepia' ? '#f4ecd8' : '#fafafa')
+  );
+  localStorage.setItem('theme', theme);
 }
 
-// --- NEW: Generate Unique Key per Book ---
-function generateBookKey() {
-  const path = window.location.pathname;
-  // Fallback to 'index' if filename is empty
-  const filename = path.substring(path.lastIndexOf('/') + 1) || 'index';
-  state.bookKey = `read-progress-${filename}`;
-}
+document.getElementById('themeToggle').addEventListener('click', () => {
+  currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+  applyTheme(currentThemeIndex);
+});
 
-// --- NEW: Progress Tracker with Toast ---
-function initProgressTracker() {
-  generateBookKey();
+// Apply immediately
+applyTheme(currentThemeIndex);
+
+// --- FONT SIZE MANAGEMENT ---
+let currentFontSize = parseInt(localStorage.getItem('fontSize')) || 18;
+document.getElementById('fontToggle').addEventListener('click', () => {
+  currentFontSize = currentFontSize >= 22 ? 16 : currentFontSize + 2;
+  html.style.setProperty('--fs-base', `${currentFontSize}px`);
+  localStorage.setItem('fontSize', currentFontSize);
+});
+html.style.setProperty('--fs-base', `${currentFontSize}px`);
+
+// --- PROGRESS TRACKING ---
+const updateProgress = debounce(() => {
+  const winScroll = window.scrollY;
+  const height = document.documentElement.scrollHeight - window.innerHeight;
+  const scrolled = (winScroll / height) * 100;
   
-  const readableElements = document.querySelectorAll('.chapter p, .chapter h2, .chapter h3');
-  const savedIndex = localStorage.getItem(state.bookKey);
-  
-  // 1. If we have a saved spot (and it's not the very top), show the toast
-  if (savedIndex && parseInt(savedIndex) > 2) {
-    const targetIndex = parseInt(savedIndex);
-    
-    // Show Toast logic
-    if (elements.toast) {
-      setTimeout(() => elements.toast.classList.add('visible'), 500);
-      
-      // Handle "Jump to location" click
-      elements.restoreBtn.onclick = () => {
-        if (readableElements[targetIndex]) {
-          readableElements[targetIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
-          elements.toast.classList.remove('visible');
-        }
-      };
-      
-      // Handle "Close" click
-      elements.closeToastBtn.onclick = () => {
-        elements.toast.classList.remove('visible');
-      };
-    }
-  }
-  
-  // 2. Start observing user's position
-  const observer = new IntersectionObserver((entries) => {
-    const visibleEntry = entries.find(entry => entry.isIntersecting);
-    
-    if (visibleEntry) {
-      const index = Array.from(readableElements).indexOf(visibleEntry.target);
-      
-      if (index > -1) {
-        state.currentParagraphIndex = index;
-        
-        // Safety: Only save to local storage if the user has actually scrolled 
-        // This prevents overwriting a deep save (e.g. paragraph 500) with "0" 
-        // just because the user opened the page and is staring at the Toast.
-        if (window.scrollY > 100 || index > 2) {
-          localStorage.setItem(state.bookKey, index);
-        }
-      }
-    }
-  }, {
-    rootMargin: '-40% 0px -40% 0px',
-    threshold: 0
+  requestAnimationFrame(() => {
+    progressBar.style.width = scrolled + '%';
   });
   
-  readableElements.forEach(el => observer.observe(el));
-}
+  localStorage.setItem(`${bookId}_progress`, winScroll);
+}, 100); // 100ms delay prevents firing too often
 
-// --- NEW: Reset Progress Function ---
-function resetProgress() {
-  // Confirm before deleting
-  if (confirm("Reset your reading progress for this book?")) {
-    // 1. Clear storage
-    localStorage.removeItem(state.bookKey);
-    // 2. Reset state
-    state.currentParagraphIndex = 0;
-    // 3. Scroll to top
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    // 4. Hide toast if it's open
-    if (elements.toast) elements.toast.classList.remove('visible');
-    // 5. Close menu
-    state.menuOpen = false;
-    if (elements.controlMenu) elements.controlMenu.classList.remove("open");
-  }
-}
+window.addEventListener('scroll', updateProgress, { passive: true });
 
-function handleProgressBar() {
-  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-  const scrollTop = window.scrollY;
-  const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
-  
-  if (elements.progressBar) {
-    elements.progressBar.style.width = Math.min(100, Math.max(0, pct)) + "%";
-  }
-  if (elements.backToTop) {
-    elements.backToTop.classList.toggle("show", scrollTop > 800);
-  }
-}
-
-function init() {
-  // Select DOM Elements
-  elements.mainControlBtn = document.getElementById("mainControlBtn");
-  elements.controlMenu = document.getElementById("controlMenu");
-  elements.themeBtn = document.getElementById("themeBtn");
-  elements.homeBtn = document.getElementById("homeBtn");
-  elements.resetBtn = document.getElementById("resetBtn");
-  elements.progressBar = document.getElementById("progressBar");
-  elements.backToTop = document.getElementById("backToTop");
-  
-  // Toast Elements
-  elements.toast = document.getElementById("restore-toast");
-  elements.restoreBtn = document.getElementById("restore-btn");
-  elements.closeToastBtn = document.getElementById("close-toast");
-  
-  initTheme();
-  initProgressTracker(); // Start tracking
-  
-  // Event Listeners
-  document.addEventListener("click", (e) => {
-    const btn = e.target.closest("button");
-    
-    // Close menu if clicking outside
-    if (!e.target.closest(".floating-controls") && state.menuOpen) {
-      state.menuOpen = false;
-      if (elements.controlMenu) elements.controlMenu.classList.remove("open");
-    }
-    
-    if (!btn) return;
-    
-    switch (btn.id) {
-      case "mainControlBtn":
-        state.menuOpen = !state.menuOpen;
-        if (elements.controlMenu) elements.controlMenu.classList.toggle("open", state.menuOpen);
-        break;
-      case "themeBtn":
-        setTheme(state.theme === "dark" ? "light" : "dark");
-        break;
-      case "homeBtn":
-        window.location.href = "../index.html";
-        break;
-      case "resetBtn":
-        resetProgress();
-        break;
-      case "backToTop":
-        window.scrollTo({ top: 0, behavior: "smooth" });
-        break;
-    }
+// --- RESTORE PROGRESS ---
+const savedProgress = parseFloat(localStorage.getItem(`${bookId}_progress`));
+if (savedProgress && savedProgress > 500) {
+  showToast('Continue where you left off?', true, () => {
+    window.scrollTo({ top: savedProgress, behavior: 'smooth' });
   });
-  
-  window.addEventListener("scroll", () => {
-    requestAnimationFrame(handleProgressBar);
-  }, { passive: true });
-  
-  handleProgressBar();
 }
 
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", init);
-} else {
-  init();
+// --- SHARE & RESET ---
+document.getElementById('resetProgress').addEventListener('click', () => {
+  localStorage.removeItem(`${bookId}_progress`);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  showToast('Progress Reset!');
+});
+
+document.getElementById('shareBtn').addEventListener('click', async () => {
+  try {
+    await navigator.clipboard.writeText(window.location.href.split('#')[0]);
+    showToast('Link Copied!');
+  } catch (err) {
+    showToast('Error Link!');
+  }
+});
+
+// --- RETURN HOME --- //
+document.getElementById('homeBtn').addEventListener('click', async () => {
+  window.location.href = "../index.html";
+});
+
+// --- TOAST SYSTEM ---
+function showToast(msg, hasActions = false, onYes = null) {
+  const msgEl = document.getElementById('toastMessage');
+  const actionEl = document.getElementById('toastActions');
+  const yesBtn = document.getElementById('toastYes');
+  const noBtn = document.getElementById('toastNo');
+  
+  msgEl.textContent = msg;
+  msgEl.style.width = "100%"
+  actionEl.style.display = hasActions ? 'flex' : 'none';
+  toast.classList.add('show');
+  
+  if (hasActions) {
+    // Clean up old listeners
+    const newYes = yesBtn.cloneNode(true);
+    const newNo = noBtn.cloneNode(true);
+    yesBtn.parentNode.replaceChild(newYes, yesBtn);
+    noBtn.parentNode.replaceChild(newNo, noBtn);
+    
+    newYes.addEventListener('click', () => {
+      if (onYes) onYes();
+      toast.classList.remove('show');
+    });
+    newNo.addEventListener('click', () => toast.classList.remove('show'));
+  } else {
+    setTimeout(() => toast.classList.remove('show'), 3000);
+  }
 }

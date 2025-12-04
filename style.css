@@ -24,9 +24,13 @@ body.dark-mode {
   padding: 0
 }
 
+a {
+  text-decoration: none;
+}
+
 body {
   font-display: swap;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: Segoe UI, Arial, serif;
   background: var(--bg-body);
   color: var(--text-primary);
   line-height: 1.6;
@@ -60,10 +64,9 @@ body {
   height: 70px
 }
 
-.nav-brand h1 {
+.nav-brand a h1 {
   font-size: 1.5rem;
   color: var(--text-primary);
-  letter-spacing: -1px
 }
 
 .nav-actions {
@@ -109,7 +112,7 @@ body {
 }
 
 .page-header p {
-  font-size: 1.1rem
+  font-size: 1rem
 }
 
 .toolbar-sticky {
@@ -353,8 +356,9 @@ body {
 }
 
 .page-footer {
+  contain: strict;
   content-visibility: auto;
-  contain-intrinsic-size: auto 180px;
+  contain-intrinsic-size: auto 120px;
   background: var(--bg-card);
   border-top: 1px solid var(--border);
   padding: 2rem 1.5rem;
@@ -482,7 +486,7 @@ body {
 
 @media (max-width: 768px) {
   .page-header h2 {
-    font-size: 1.5rem
+    font-size: 1.4rem;
   }
   
   .toolbar {
@@ -534,7 +538,7 @@ body {
     padding: 0.75rem 1rem
   }
   
-  .nav-brand h1 {
-    font-size: 1.25rem
+  .nav-brand a h1 {
+    font-size: 1.25rem;
   }
 }

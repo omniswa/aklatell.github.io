@@ -18,7 +18,9 @@
 </head>
 
 <body>
-  <div id="progressBar"></div>
+  <div id="progress-container">
+    <div id="progress-bar"></div>
+  </div>
   
   <main>
     <header style="position: static; transform: none; background: transparent; box-shadow: none; border: none; padding: 0; margin-bottom: 3rem; display: block;">
@@ -27,29 +29,35 @@
     </header>
   </main>
   
-  <header>
-    <button class="btn" id="homeBtn" aria-label="Go Home" title="Home">
-      <span id="home">↩️</span>
+  <div class="ui-controls">
+    <button class="btn-fab" id="share-btn" title="Copy Link" aria-label="Share Link">
+      🔗
     </button>
-    <button class="btn" id="themeToggle" aria-label="Toggle Theme" title="Switch Theme">
-      <span id="themeIcon">☀️</span>
+    <button class="btn-fab" id="settings-toggle" title="Settings" aria-label="Reading Settings">
+      ⚙️
     </button>
-    <button class="btn" id="fontToggle" aria-label="Adjust Font Size" title="Font Size">
-      <span>Aa</span>
-    </button>
-    <button class="btn" id="shareBtn" aria-label="Share Link" title="Copy Link">
-      <span>🔗</span>
-    </button>
-    <button class="btn" id="resetProgress" aria-label="Reset Progress" title="Reset">
-      <span>🔄</span>
-    </button>
-  </header>
+  </div>
   
-  <div id="toast">
-    <span id="toastMessage"></span>
-    <div id="toastActions" style="display: none;">
-      <button id="toastYes">Jump</button>
-      <button id="toastNo" style="background: transparent; border: 1px solid rgba(255,255,255,0.3);">Stay</button>
+  <div class="settings-panel" id="settings-panel">
+    <div class="setting-group">
+      <span class="setting-label">THEME</span>
+      <div class="theme-toggles">
+        <div class="theme-btn" data-set-theme="light">Light</div>
+        <div class="theme-btn" data-set-theme="sepia">Sepia</div>
+        <div class="theme-btn" data-set-theme="dark">Dark</div>
+      </div>
+    </div>
+    <div class="setting-group">
+      <span class="setting-label">PROGRESS</span>
+      <button class="btn-ghost" id="reset-progress" style="width: 100%;">Reset Position</button>
+    </div>
+  </div>
+  
+  <div class="toast" id="resume-toast">
+    <span>Resuming reading?</span>
+    <div class="toast-actions">
+      <button class="btn-ghost" id="toast-no">Dismiss</button>
+      <button class="btn-primary" id="toast-yes">Jump</button>
     </div>
   </div>
 </body>

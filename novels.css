@@ -1,86 +1,97 @@
 :root {
-  /* Light Theme (Default) */
   --bg-color: #ffffff;
   --text-color: #222222;
   --accent-color: #d35400;
   --ui-bg: #f8f9fa;
   --ui-border: #e9ecef;
-  font-family: Arial, Helvetica, sans-serif;
-  --font-ui: Arial;
-  --max-width: 700px;
-  --line-height: 2;
+  --font-size-base: 1.125rem;
+  --line-height: 2
 }
 
-/* Sepia Theme */
 [data-theme="sepia"] {
   --bg-color: #f4ecd8;
   --text-color: #433422;
   --accent-color: #8b5e3c;
   --ui-bg: #e9e0c9;
-  --ui-border: #d4cba8;
+  --ui-border: #d4cba8
 }
 
-/* Dark Theme */
 [data-theme="dark"] {
   --bg-color: #1a1a1a;
   --text-color: #e0e0e0;
   --accent-color: #e67e22;
   --ui-bg: #2d2d2d;
-  --ui-border: #404040;
+  --ui-border: #404040
 }
 
 @font-face {
-  font-family: "Newsreader";
-  src: url(../newsreader.woff2);
-  font-display: swap;
+  font-family: "Spectral";
+  src: url(../spectral.woff2);
+  font-display: swap
 }
 
-/* RESET & BASE */
+@font-face {
+  font-family: "Domine";
+  src: url(../domine.woff2);
+  font-display: swap
+}
+
+[data-font="spectral"] {
+  --font-ui: "Spectral", Arial, Helvetica, sans-serif
+}
+
+[data-font="domine"] {
+  --font-ui: "Domine", Arial, Helvetica, sans-serif
+}
+
+[data-font="arial"] {
+  --font-ui: Arial, Helvetica, sans-serif
+}
+
 * {
-  box-sizing: border-box;
+  box-sizing: border-box
 }
 
 html {
-  scroll-behavior: auto;
+  scroll-behavior: auto
 }
 
 body {
   background-color: var(--bg-color);
   color: var(--text-color);
-  font-family: var(--font-body);
+  font-family: var(--font-ui);
   line-height: var(--line-height);
   margin: 0;
   padding: 0;
+  font-size: var(--font-size-base)
 }
 
-/* READING PROGRESS BAR */
 #progress-container {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 4px;
-  background: transparent;
+  background: #fff0;
   z-index: 1000;
+  will-change: auto
 }
 
 #progress-bar {
   height: 100%;
   background: var(--accent-color);
   width: 0%;
-  transition: width 0.1s;
+  transform: translateZ(0);
+  will-change: width
 }
 
-/* MAIN LAYOUT - OPTIMIZED FOR READABILITY (65ch) */
 main {
-  max-width: var(--max-width);
+  max-width: 700px;
   margin: 0 auto;
   padding: 2rem 1.5rem 6rem 1.5rem;
-  /* Bottom padding for UI space */
-  font-size: 1.125rem;
+  min-height: 100vh
 }
 
-/* TYPOGRAPHY */
 h1,
 h2,
 h3 {
@@ -88,40 +99,41 @@ h3 {
   font-family: var(--font-ui);
   color: var(--text-color);
   margin-top: 2em;
+  font-display: swap
 }
 
 h1 {
   text-align: center;
   margin-bottom: 2rem;
-  font-size: 2rem;
+  font-size: 2rem
 }
 
 p {
   text-align: justify;
   margin-bottom: 1.5em;
+  word-wrap: break-word;
+  overflow-wrap: break-word
 }
 
 a {
   color: var(--accent-color);
-  text-decoration: none;
+  text-decoration: none
 }
 
-/* Speaker Names (Specific to Plays) */
 p b,
 p strong {
   font-family: var(--font-ui);
   text-transform: uppercase;
-  font-size: 0.9em;
-  letter-spacing: 0.05em;
+  font-size: .9em;
+  letter-spacing: .05em
 }
 
 pre,
 blockquote {
   overflow-x: auto;
-  font-size: 0.9rem;
+  font-size: .9rem
 }
 
-/* UI CONTROLS (FLOATING FAB) */
 .ui-controls {
   position: fixed;
   bottom: 20px;
@@ -131,6 +143,8 @@ blockquote {
   gap: 10px;
   z-index: 900;
   font-family: var(--font-ui);
+  transform: translateZ(0);
+  will-change: auto
 }
 
 .btn-fab {
@@ -144,16 +158,17 @@ blockquote {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgb(0 0 0 / .1);
   font-size: 1.2rem;
-  transition: transform 0.2s;
+  transition: transform 0.2s ease;
+  transform: translateZ(0);
+  backface-visibility: hidden
 }
 
 .btn-fab:hover {
-  transform: scale(1.05);
+  transform: scale(1.05) translateZ(0)
 }
 
-/* SETTINGS PANEL */
 .settings-panel {
   position: fixed;
   bottom: 80px;
@@ -162,79 +177,94 @@ blockquote {
   border: 1px solid var(--ui-border);
   border-radius: 8px;
   padding: 1rem;
-  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
-  display: none;
-  /* Hidden by default */
+  box-shadow: 0 10px 15px rgb(0 0 0 / .1);
   font-family: var(--font-ui);
   z-index: 901;
   width: 200px;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  transform: translateZ(0)
 }
 
 .settings-panel.active {
-  display: block;
+  visibility: visible;
+  opacity: 1
 }
 
 .setting-group {
-  margin-bottom: 1rem;
+  margin-bottom: 1rem
 }
 
 .setting-label {
   display: block;
-  font-size: 0.8rem;
-  margin-bottom: 0.5rem;
-  opacity: 0.8;
+  font-size: .8rem;
+  margin-bottom: .5rem;
+  opacity: .8
 }
 
-.theme-toggles {
+.theme-toggles,
+.size-toggles {
   display: flex;
-  gap: 5px;
+  gap: 5px
 }
 
-.theme-btn {
+.font-toggles {
+  display: grid;
+  gap: 5px
+}
+
+.theme-btn,
+.font-btn,
+.size-btn {
   flex: 1;
   padding: 5px;
   border: 1px solid var(--ui-border);
   cursor: pointer;
-  font-size: 0.8rem;
+  font-size: .8rem;
   text-align: center;
   border-radius: 4px;
+  transition: border-color 0.2s ease
 }
 
-.theme-btn.active {
+.theme-btn.active,
+.font-btn.active,
+.size-btn.active {
   border-color: var(--accent-color);
-  font-weight: bold;
+  font-weight: 700
 }
 
-/* TOAST NOTIFICATION */
 .toast {
   position: fixed;
   top: 20px;
   left: 50%;
-  transform: translateX(-50%) translateY(-100px);
   background: var(--ui-bg);
   color: var(--text-color);
   border: 1px solid var(--ui-border);
   padding: 1rem;
   border-radius: 8px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 20px rgb(0 0 0 / .2);
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
+  font-size: 1rem;
   font-family: var(--font-ui);
   z-index: 1100;
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  width: 80%;
+  width: 90%;
   max-width: 400px;
+  transform: translate(-50%, -180px) translateZ(0);
+  transition: transform 0.3s cubic-bezier(.175, .885, .32, 1.275);
+  will-change: transform
 }
 
 .toast.visible {
-  transform: translateX(-50%) translateY(0);
+  transform: translate(-50%, 0) translateZ(0)
 }
 
 .toast-actions {
   display: flex;
-  gap: 10px;
+  gap: 10px
 }
 
 .btn-primary {
@@ -244,29 +274,49 @@ blockquote {
   padding: 5px 10px;
   border-radius: 4px;
   cursor: pointer;
+  transition: opacity 0.2s ease
+}
+
+.btn-primary:hover {
+  opacity: .9
 }
 
 .btn-ghost {
-  background: transparent;
+  background: #fff0;
   color: var(--text-color);
   border: 1px solid var(--ui-border);
   padding: 5px 10px;
   border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.2s ease
 }
 
-/* PRINT OPTIMIZATION */
+.btn-ghost:hover {
+  background-color: rgb(0 0 0 / .05)
+}
+
 @media print {
-  
+
   .ui-controls,
   #progress-container,
   .settings-panel,
   .toast {
-    display: none !important;
+    display: none !important
   }
   
   body {
-    background: white;
-    color: black;
+    background: #fff;
+    color: #000
+  }
+}
+
+.chapter {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 1000px
+}
+
+@media screen and (max-width:480px) {
+  p {
+    text-align: left
   }
 }

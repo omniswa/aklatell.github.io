@@ -12,51 +12,19 @@
 	<meta name="author" content="Mark Twain" />
 	<meta name="robots" content="index, follow" />
 	
-	<link rel="preload" href="../newsreader.woff2" as="font" type="font/woff2" crossorigin>
 	<link rel="preload" href="../novels.css" as="style">
 	<link rel="stylesheet" href="../novels.css">
-	<script>
-		(function() {
-			try {
-				const saved = localStorage.getItem("user-theme");
-				const theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-				document.documentElement.setAttribute("data-theme", theme);
-			} catch (e) {}
-		})();
-	</script>
 	<script src="../novels.js" defer></script>
 </head>
 
 <body>
-	<div id="restore-toast" class="toast" aria-hidden="true">
-		<span>Picked up where you left off?</span>
-		<button id="restore-btn">Jump to location</button>
-		<button id="close-toast" aria-label="Close">✕</button>
-	</div>
-	
-	<div id="progressBarContainer">
-		<div id="progressBar" aria-hidden="true"></div>
-	</div>
-	
-	<div class="floating-controls">
-		<button class="control-btn" id="mainControlBtn" aria-label="Menu">☰</button>
-		<div class="control-menu" id="controlMenu" aria-hidden="true">
-			<button class="control-item" id="homeBtn" aria-label="Home">🏠</button>
-			<button class="control-item" id="themeBtn" aria-label="Toggle Theme">
-				<script>
-					document.write(document.documentElement.getAttribute("data-theme") === "dark" ? "☀️" : "🌙")
-				</script>
-			</button>
-			<button class="control-item" id="resetBtn" aria-label="Reset Progress" title="Start Over">↺</button>
-		</div>
-	</div>
-	
-	<button id="backToTop" aria-label="Back to Top">↑</button>
 	
 	<main>
-		<section class="chapter" id="halftitlepage" epub:type="halftitlepage frontmatter">
-			<h1 epub:type="fulltitle">The Adventures of Huckleberry Finn <br /> by Mark Twain</h1>
-		</section>
+		<header style="position: static; transform: none; background: transparent; box-shadow: none; border: none; padding: 0; margin-bottom: 3rem; display: block;">
+			<h1>The Adventures of Huckleberry Finn</h1>
+			<p style="text-align: center; font-style: italic; color: var(--text-muted);">by Mark Twain</p>
+		</header>
+		
 		<section class="chapter" id="chapter-1" epub:type="chapter bodymatter z3998:fiction">
 			<h2 epub:type="ordinal z3998:roman">I</h2>
 			<p>You don’t know about me without you have read a book by the name of <i epub:type="se:name.publication.book">The Adventures of Tom Sawyer</i>; but that ain’t no matter. That book was made by <abbr epub:type="z3998:name-title">Mr.</abbr> Mark Twain, and he told the truth, mainly. There was things which he stretched, but mainly he told the truth. That is nothing. I never seen anybody but lied one time or another, without it was Aunt Polly, or the widow, or maybe Mary. Aunt Polly⁠—Tom’s Aunt Polly, she is⁠—and Mary, and the Widow Douglas is all told about in that book, which is mostly a true book, with some stretchers, as I said before.</p>
@@ -2535,6 +2503,7 @@
 			<p class="end">Yours truly, <i epub:type="se:name.person">Huck Finn</i>.</p>
 		</section>
 	</main>
+	
 </body>
 
 </html>

@@ -5,139 +5,144 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	
-	<title>Aklatell - Public Library | Discover Your Next Great Read</title>
-	<meta name="description" content="Browse our extensive collection of fiction, non-fiction, mystery, romance, sci-fi, and fantasy books. Find your next favorite book at Aklatell Public Library.">
-	<meta name="keywords" content="library, books, fiction, non-fiction, mystery, romance, sci-fi, fantasy, reading, literature, online library, book collection, aklatell">
+	<title>Aklatell Library | Curated Classic Literature Collection</title>
+	<meta name="description" content="Read classic literature online. Explore our curated collection of fiction, philosophy, and timeless stories including Pride and Prejudice, Dracula, and more.">
+	<meta name="keywords" content="free books, classic literature, online library, ebook collection, aklatell, reading">
 	<meta name="author" content="Aklatell">
-	<meta name="robots" content="index, follow">
+	<meta name="theme-color" content="#ffffff">
 	
-	<!-- Open Graph / Social Media -->
 	<meta property="og:type" content="website">
-	<meta property="og:url" content="https://aklatell.pages.dev/">
-	<meta property="og:title" content="Aklatell - Public Library | Discover Your Next Great Read">
-	<meta property="og:description" content="Browse our extensive collection of fiction, non-fiction, mystery, romance, sci-fi, and fantasy books.">
+	<meta property="og:title" content="Aklatell Library | Discover Great Reads">
+	<meta property="og:description" content="Browse our extensive collection of classic fiction and non-fiction.">
 	<meta property="og:image" content="https://aklatell.pages.dev/og-image.jpg">
 	
-	<!-- Twitter Card -->
-	<meta name="twitter:card" content="summary_large_image">
-	<meta name="twitter:title" content="Aklatell - Public Library">
-	<meta name="twitter:description" content="Browse our extensive collection of classic books.">
-	
-	<!-- Preload critical resources -->
 	<link rel="preload" href="books.json" as="fetch" type="application/json" crossorigin>
 	<link rel="preload" href="style.css" as="style">
 	<link rel="stylesheet" href="style.css">
 	
-	<!-- Structured Data for SEO -->
 	<script type="application/ld+json">
 		{
 			"@context": "https://schema.org",
 			"@type": "Library",
 			"name": "Aklatell Public Library",
-			"description": "Browse our extensive collection of fiction, non-fiction, mystery, romance, sci-fi, and fantasy books.",
 			"url": "https://aklatell.pages.dev/",
-			"sameAs": [],
-			"address": {
-				"@type": "PostalAddress",
-				"addressLocality": "Urdaneta",
-				"addressRegion": "Ilocos",
-				"addressCountry": "PH"
-			}
+			"description": "Digital library offering classic literature."
 		}
 	</script>
 </head>
 
 <body>
+	<a href="#booksGrid" class="skip-link">Skip to books</a>
 	
-	<nav class="navbar">
-		<div class="nav-brand">
-			<a href="index.html">
-				<h1>📚 AKLATELL</h1>
-			</a>
+	<header class="mobile-header">
+		<div class="logo-area">
+			<h1>📚 AKLATELL</h1>
 		</div>
-		<div class="nav-actions">
-			<button class="icon-btn" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
-			<button class="icon-btn" id="menuBtn" aria-label="Open menu">⚙️</button>
+		<div class="mobile-actions">
+			<button class="icon-btn" id="mobileThemeToggle" aria-label="Toggle theme">🌙</button>
+			<button class="icon-btn" id="mobileMenuBtn" aria-label="Open menu">⚙️</button>
 		</div>
-	</nav>
+	</header>
 	
-	<main class="main-container">
-		<header class="page-header">
-			<h2>Discover your next great read</h2>
-			<p>Explore our curated collection of classic literature and timeless stories.</p>
-		</header>
-		
-		<div class="toolbar-sticky">
-			<div class="toolbar">
-				<div class="search-box">
-					<span class="search-icon" aria-hidden="true">🔍</span>
-					<input type="search" id="searchInput" placeholder="Search by title or author..." aria-label="Search books" autocomplete="off">
+	<div class="app-layout">
+		<aside class="sidebar">
+			<div class="sidebar-sticky">
+				<div class="sidebar-header">
+					<h1>📚 AKLATELL</h1>
+					<p>Curated Classics</p>
 				</div>
 				
-				<div class="toolbar-actions">
-					<div class="filter-group">
-						<button class="filter-chip active" data-filter="all">All Books</button>
+				<div class="search-wrapper">
+					<label for="searchInput" class="sr-only">Search books</label>
+					<div class="input-group">
+						<span class="search-icon">🔍</span>
+						<input type="search" id="searchInput" placeholder="Search title or author..." autocomplete="off">
+					</div>
+				</div>
+				
+				<div class="filter-section">
+					<h3>Filter Collection</h3>
+					<div class="filter-group toolbar-actions">
+						<button class="filter-chip active" data-filter="all">
+							<span>📖</span> All Books
+						</button>
 						<button class="filter-chip" data-filter="favorites">
-							Favorites (<span id="favCount">0</span>)
+							<span>❤️</span> Favorites <span class="badge" id="favCount"> 0</span>
 						</button>
 					</div>
-					
-					<label for="sortSelect" class="sr-only">Sort books</label>
-					<select class="sort-select" id="sortSelect" aria-label="Sort books">
-						<option value="title">A-Z Title</option>
-						<option value="author">A-Z Author</option>
-						<option value="newest">Newest First</option>
-					</select>
+				</div>
+				
+				<div class="filter-section">
+					<h3>Sort By</h3>
+					<div class="select-wrapper">
+						<select id="sortSelect" aria-label="Sort books">
+							<option value="newest">✨ Newest First</option>
+							<option value="title">🅰️ Title (A-Z)</option>
+							<option value="author">👤 Author (A-Z)</option>
+						</select>
+					</div>
+				</div>
+				
+				<div class="desktop-footer">
+					<button class="theme-switch-btn" id="themeToggle">
+						<span class="icon">🌙</span> Toggle Dark Mode
+					</button>
+					<nav>
+						<a href="#terms">Terms</a> | <a href="#privacy">Privacy</a>
+					</nav>
+					<p>&copy; AKLATELL</p>
 				</div>
 			</div>
-		</div>
+		</aside>
 		
-		<!-- Books grid with explicit height to prevent CLS -->
-		<div class="books-grid" id="booksGrid" role="region" aria-label="Book collection">
-			<!-- Skeleton loader to prevent CLS -->
-			<div class="loading" aria-live="polite" aria-busy="true">Loading library...</div>
-		</div>
-		
-		<div class="load-more-container">
-			<button id="loadMoreBtn" class="load-more-btn" style="display: none;" aria-label="Load more books">Load More Books</button>
-		</div>
-	</main>
+		<main class="main-content">
+			<header class="content-header">
+				<h2>Browse Collection</h2>
+				<p>Discover timeless stories and philosophical insights.</p>
+			</header>
+			
+			<div class="books-grid" id="booksGrid" role="region" aria-label="Book list">
+				<div class="loading-skeleton">
+					<div class="skeleton-card"></div>
+					<div class="skeleton-card"></div>
+					<div class="skeleton-card"></div>
+					<div class="skeleton-card"></div>
+				</div>
+				<div class="loading text-center" aria-live="polite">Loading library...</div>
+			</div>
+			
+			<div class="load-more-container">
+				<button id="loadMoreBtn" class="load-more-btn" style="display: none;">
+					Load More Books
+				</button>
+			</div>
+			
+			<footer class="mobile-footer">
+				<p>Aklatell Public Library</p>
+				<nav>
+					<a href="#terms">Terms</a>
+					<a href="#privacy">Privacy</a>
+				</nav>
+			</footer>
+		</main>
+	</div>
 	
-	<footer class="page-footer">
-		<div class="footer-content">
-			<p>Aklatell Public Library</p>
-			<nav aria-label="Footer navigation">
-				<a href="#privacy">Privacy Policy</a>
-				<a href="#terms">Terms of Service</a>
-				<a href="#contact">Contact</a>
-			</nav>
-		</div>
-	</footer>
+	<button id="menuBtn" style="display:none;" aria-hidden="true"></button>
 	
-	<div class="modal" id="menuModal" role="dialog" aria-modal="true" aria-labelledby="menuTitle">
+	<div class="modal" id="menuModal" role="dialog" aria-modal="true">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h2 id="menuTitle">Menu</h2>
-				<button class="close-btn" id="closeModal" aria-label="Close menu">&times;</button>
+				<h2>Menu</h2>
+				<button class="close-btn" id="closeModal">&times;</button>
 			</div>
-			<nav class="modal-links" aria-label="Main menu">
-				<a href="#browse" class="menu-item">
-					<div class="menu-item-title">📚 Browse Collection</div>
-					<div class="menu-item-desc">Explore our full library catalog</div>
-				</a>
-				<a href="#about" class="menu-item">
-					<div class="menu-item-title">ℹ️ About Us</div>
-					<div class="menu-item-desc">Learn about Aklatell Library</div>
-				</a>
-				<a href="#contact" class="menu-item">
-					<div class="menu-item-title">📞 Contact</div>
-					<div class="menu-item-desc">Get in touch with us</div>
-				</a>
+			<nav class="modal-links">
+				<a href="#browse">📚 Browse Collection</a>
+				<a href="#about">ℹ️ About Us</a>
+				<a href="#contact">📞 Contact</a>
 			</nav>
 		</div>
 	</div>
 	
-	<!-- Defer JavaScript execution -->
 	<script src="script.js" defer></script>
 </body>
 

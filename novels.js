@@ -186,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // --- RESUME LOGIC ---
   const savedProgress = parseFloat(localStorage.getItem(BOOK_ID));
-  if (savedProgress && savedProgress > 0.10 && savedProgress < 99) {
+  if (savedProgress && savedProgress > 0.10 && savedProgress <= 100) {
     setTimeout(() => { resumeToast.classList.add('visible') }, 100);
     
     document.getElementById('toast-yes').addEventListener('click', () => {

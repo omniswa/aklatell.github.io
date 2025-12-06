@@ -76,6 +76,9 @@ const renderBatch = () => {
     return;
   }
   
+  // Define the Heart SVG string
+  const heartIcon = `<svg class="icon-svg" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>`;
+  
   nextBatch.forEach(book => {
     const isFav = favorites.includes(book.id);
     const card = document.createElement('article');
@@ -87,10 +90,10 @@ const renderBatch = () => {
               data-id="${book.id}"
               aria-label="${isFav ? 'Remove from favorites' : 'Add to favorites'}"
               aria-pressed="${isFav}">
-        ${isFav ? '❤️' : '🤍'}
+        ${heartIcon}
       </button>
       <div class="book-emoji" aria-hidden="true">${book.emoji}</div>
-      <h2 class="head3" class="book-title">${escapeHtml(book.title)}</h2>
+      <h2 class="head3 book-title">${escapeHtml(book.title)}</h2>
       <p class="book-author">${escapeHtml(book.author)}</p>
       <p class="book-preview">${escapeHtml(book.preview)}</p>
     `;
@@ -245,7 +248,8 @@ const toggleFavorite = (id) => {
   buttons.forEach(btn => {
     const isFav = favorites.includes(id);
     btn.classList.toggle('active', isFav);
-    btn.textContent = isFav ? '❤️' : '🤍';
+    // Note: We don't need to change innerHTML anymore, 
+    // CSS handles the SVG fill color based on the 'active' class.
     btn.setAttribute('aria-pressed', isFav);
   });
   

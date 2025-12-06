@@ -39,8 +39,18 @@
 			<h1>📚 AKLATELL</h1>
 		</div>
 		<div class="mobile-actions">
-			<button class="icon-btn" id="mobileThemeToggle" aria-label="Toggle theme">🌙</button>
-			<button class="icon-btn" id="mobileMenuBtn" aria-label="Open menu">⚙️</button>
+			<button class="icon-btn" id="mobileThemeToggle" aria-label="Toggle theme">
+				<svg class="icon-svg" viewBox="0 0 24 24">
+					<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+				</svg>
+			</button>
+			<button class="icon-btn" id="mobileMenuBtn" aria-label="Open menu">
+				<svg class="icon-svg" viewBox="0 0 24 24">
+					<line x1="3" y1="12" x2="21" y2="12"></line>
+					<line x1="3" y1="6" x2="21" y2="6"></line>
+					<line x1="3" y1="18" x2="21" y2="18"></line>
+				</svg>
+			</button>
 		</div>
 	</header>
 	
@@ -55,7 +65,12 @@
 				<div class="search-wrapper">
 					<label for="searchInput" class="sr-only">Search books</label>
 					<div class="input-group">
-						<span class="search-icon">🔍</span>
+						<span class="search-icon">
+							<svg class="icon-svg" viewBox="0 0 24 24">
+								<circle cx="11" cy="11" r="8"></circle>
+								<line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+							</svg>
+						</span>
 						<input type="search" id="searchInput" placeholder="Search title or author..." autocomplete="off">
 					</div>
 				</div>
@@ -64,10 +79,17 @@
 					<p class="head3">Filter Collection</p>
 					<div class="filter-group toolbar-actions">
 						<button class="filter-chip active" data-filter="all">
-							<span>📖</span> All Books
+							<svg class="icon-svg" viewBox="0 0 24 24">
+								<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+								<path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+							</svg>
+							All Books
 						</button>
 						<button class="filter-chip" data-filter="favorites">
-							<span>❤️</span> Favorites <span class="badge" id="favCount"> 0</span>
+							<svg class="icon-svg" viewBox="0 0 24 24">
+								<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+							</svg>
+							Favorites <span class="badge" id="favCount"> 0</span>
 						</button>
 					</div>
 				</div>
@@ -76,16 +98,21 @@
 					<p class="head3">Sort By</p>
 					<div class="select-wrapper">
 						<select id="sortSelect" aria-label="Sort books">
-							<option value="newest">✨ Newest First</option>
-							<option value="title">🅰️ Title (A-Z)</option>
-							<option value="author">👤 Author (A-Z)</option>
+							<option value="newest">Newest First</option>
+							<option value="title">Title (A-Z)</option>
+							<option value="author">Author (A-Z)</option>
 						</select>
 					</div>
 				</div>
 				
 				<div class="desktop-footer">
 					<button class="theme-switch-btn" id="themeToggle">
-						<span class="icon">🌙</span> Toggle Dark Mode
+						<span class="icon">
+							<svg class="icon-svg" viewBox="0 0 24 24">
+								<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+							</svg>
+						</span>
+						Toggle Dark Mode
 					</button>
 					<nav>
 						<a href="#terms">Terms</a> | <a href="#privacy">Privacy</a>
@@ -136,9 +163,27 @@
 				<button class="close-btn" id="closeModal">&times;</button>
 			</div>
 			<nav class="modal-links">
-				<a href="#browse">📚 Browse Collection</a>
-				<a href="#about">ℹ️ About Us</a>
-				<a href="#contact">📞 Contact</a>
+				<a href="#browse">
+					<svg class="icon-svg" style="margin-right: 8px" viewBox="0 0 24 24">
+						<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+						<path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+					</svg>
+					Browse Collection
+				</a>
+				<a href="#about">
+					<svg class="icon-svg" style="margin-right: 8px" viewBox="0 0 24 24">
+						<circle cx="12" cy="12" r="10"></circle>
+						<line x1="12" y1="16" x2="12" y2="12"></line>
+						<line x1="12" y1="8" x2="12.01" y2="8"></line>
+					</svg>
+					About Us
+				</a>
+				<a href="#contact">
+					<svg class="icon-svg" style="margin-right: 8px" viewBox="0 0 24 24">
+						<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+					</svg>
+					Contact
+				</a>
 			</nav>
 		</div>
 	</div>

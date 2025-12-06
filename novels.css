@@ -1,59 +1,65 @@
 :root {
   --bg-color: #ffffff;
   --text-color: #222222;
-  --accent-color: #d35400;
-  --ui-bg: #f8f9fa;
+  --accent-color: #ea580c;
+  --ui-bg: rgba(248, 249, 250, 0.95);
+  /* Semi-transparent for glass effect */
   --ui-border: #e9ecef;
   --font-size-base: 1.125rem;
-  --line-height: 2
+  --line-height: 1.8;
+  /* Slightly tighter for better mobile reading */
+  --max-width: 680px;
+  /* Optimal line length */
 }
 
 [data-theme="sepia"] {
   --bg-color: #f4ecd8;
   --text-color: #433422;
   --accent-color: #8b5e3c;
-  --ui-bg: #e9e0c9;
-  --ui-border: #d4cba8
+  --ui-bg: rgba(233, 224, 201, 0.95);
+  --ui-border: #d4cba8;
 }
 
 [data-theme="dark"] {
   --bg-color: #1a1a1a;
-  --text-color: #e0e0e0;
-  --accent-color: #e67e22;
-  --ui-bg: #2d2d2d;
-  --ui-border: #404040
+  --text-color: #d0d0d0;
+  /* Softer white for eye strain */
+  --accent-color: #fb923c;
+  --ui-bg: rgba(45, 45, 45, 0.95);
+  --ui-border: #404040;
 }
 
+/* Font loading strategy */
 @font-face {
   font-family: "Spectral";
-  src: url(../spectral.woff2);
-  font-display: swap
+  src: url(../spectral.woff2) format('woff2');
+  font-display: swap;
 }
 
 @font-face {
   font-family: "Domine";
-  src: url(../domine.woff2);
-  font-display: swap
+  src: url(../domine.woff2) format('woff2');
+  font-display: swap;
 }
 
 [data-font="spectral"] {
-  --font-ui: "Spectral", Arial, Helvetica, sans-serif
+  --font-ui: "Spectral", Georgia, serif;
 }
 
 [data-font="domine"] {
-  --font-ui: "Domine", Arial, Helvetica, sans-serif
+  --font-ui: "Domine", Georgia, serif;
 }
 
 [data-font="arial"] {
-  --font-ui: Arial, Helvetica, sans-serif
+  --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
 }
 
 * {
-  box-sizing: border-box
+  box-sizing: border-box;
 }
 
 html {
-  scroll-behavior: auto
+  scroll-behavior: smooth;
 }
 
 body {
@@ -61,262 +67,269 @@ body {
   color: var(--text-color);
   font-family: var(--font-ui);
   line-height: var(--line-height);
+  font-size: var(--font-size-base);
   margin: 0;
-  padding: 0;
-  font-size: var(--font-size-base)
+  transition: background-color 0.3s ease, color 0.3s ease;
+  /* Improve font rendering */
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
+/* --- PERFORMANCE: Content Visibility --- */
+/* This tells the browser NOT to render chapters off-screen. 
+   Massive performance win for long books. */
+.chapter {
+  content-visibility: auto;
+  contain-intrinsic-size: 1000px;
+  /* Estimate height to prevent scrollbar jumping */
+  margin-bottom: 4rem;
+}
+
+main {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 2rem 1.5rem 8rem 1.5rem;
+  /* Extra bottom padding for scroll space */
+  min-height: 100vh;
+}
+
+/* Typography Improvements */
+h1,
+h2,
+h3 {
+  text-align: center;
+  color: var(--text-color);
+  margin-top: 2.5em;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+  border-bottom: 1px solid var(--ui-border);
+  padding-bottom: 0.5rem;
+}
+
+a {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+p {
+  /* UX FIX: Left align is better for accessibility and mobile than justify */
+  text-align: left;
+  margin-bottom: 1.2em;
+  max-width: 65ch;
+  /* Optimal character count per line */
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Progress Bar */
 #progress-container {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 4px;
-  background: #fff0;
+  background: transparent;
   z-index: 1000;
-  will-change: auto
+  pointer-events: none;
 }
 
 #progress-bar {
   height: 100%;
   background: var(--accent-color);
   width: 0%;
-  transform: translateZ(0);
-  will-change: width
+  transition: width 0.1s linear;
 }
 
-main {
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 2rem 1.5rem 6rem 1.5rem;
-  min-height: 100vh
-}
-
-h1,
-h2,
-h3 {
-  text-align: center;
-  font-family: var(--font-ui);
-  color: var(--text-color);
-  margin-top: 2em;
-  font-display: swap
-}
-
-h1 {
-  text-align: center;
-  margin-bottom: 2rem;
-  font-size: 2rem
-}
-
-p {
-  text-align: justify;
-  margin-bottom: 1.5em;
-  word-wrap: break-word;
-  overflow-wrap: break-word
-}
-
-a {
-  color: var(--accent-color);
-  text-decoration: none
-}
-
-p b,
-p strong {
-  font-family: var(--font-ui);
-  text-transform: uppercase;
-  font-size: .9em;
-  letter-spacing: .05em
-}
-
-pre,
-blockquote {
-  overflow-x: auto;
-  font-size: .9rem
-}
-
+/* UI Controls Container */
 .ui-controls {
   position: fixed;
-  bottom: 20px;
+  bottom: 30px;
   right: 20px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   z-index: 900;
-  font-family: var(--font-ui);
-  transform: translateZ(0);
-  will-change: auto
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+}
+
+/* Hide controls when reading (scrolling down) */
+.ui-controls.hidden {
+  transform: translateY(100px);
+  opacity: 0;
+  pointer-events: none;
 }
 
 .btn-fab {
   background: var(--ui-bg);
   color: var(--text-color);
   border: 1px solid var(--ui-border);
+  backdrop-filter: blur(8px);
+  /* Modern Glass Effect */
+  -webkit-backdrop-filter: blur(8px);
   border-radius: 50%;
-  width: 48px;
-  height: 48px;
+  width: 50px;
+  height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 4px 6px rgb(0 0 0 / .1);
-  font-size: 1.2rem;
-  transition: transform 0.2s ease;
-  transform: translateZ(0);
-  backface-visibility: hidden
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.2s;
 }
 
 .btn-fab:hover {
-  transform: scale(1.05) translateZ(0)
+  transform: scale(1.1);
+  background-color: var(--ui-bg);
 }
 
+.btn-fab:active {
+  transform: scale(0.95);
+}
+
+/* Settings Panel */
 .settings-panel {
   position: fixed;
-  bottom: 80px;
+  bottom: 90px;
   right: 20px;
   background: var(--ui-bg);
+  backdrop-filter: blur(10px);
   border: 1px solid var(--ui-border);
-  border-radius: 8px;
-  padding: 1rem;
-  box-shadow: 0 10px 15px rgb(0 0 0 / .1);
-  font-family: var(--font-ui);
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  width: 260px;
   z-index: 901;
-  width: 200px;
   visibility: hidden;
   opacity: 0;
-  transition: opacity 0.2s ease, visibility 0.2s ease;
-  transform: translateZ(0)
+  transform: translateY(10px) scale(0.95);
+  transition: all 0.2s ease;
 }
 
 .settings-panel.active {
   visibility: visible;
-  opacity: 1
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
 .setting-group {
-  margin-bottom: 1rem
+  margin-bottom: 1.25rem;
 }
 
 .setting-label {
   display: block;
-  font-size: .8rem;
-  margin-bottom: .5rem;
-  opacity: .8
+  font-size: 0.75rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin-bottom: 0.75rem;
+  opacity: 0.7;
 }
 
 .theme-toggles,
-.size-toggles {
-  display: flex;
-  gap: 5px
-}
-
+.size-toggles,
 .font-toggles {
-  display: grid;
-  gap: 5px
+  display: flex;
+  gap: 8px;
 }
 
 .theme-btn,
 .font-btn,
 .size-btn {
   flex: 1;
-  padding: 5px;
+  padding: 8px 4px;
   border: 1px solid var(--ui-border);
+  background: transparent;
+  color: var(--text-color);
   cursor: pointer;
-  font-size: .8rem;
+  font-size: 0.85rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
   text-align: center;
-  border-radius: 4px;
-  transition: border-color 0.2s ease
 }
 
 .theme-btn.active,
 .font-btn.active,
 .size-btn.active {
+  background: var(--accent-color);
+  color: #fff;
   border-color: var(--accent-color);
-  font-weight: 700
 }
 
+/* Toast (Moved to bottom for better UX) */
 .toast {
   position: fixed;
-  top: 20px;
+  top: 30px;
   left: 50%;
   background: var(--ui-bg);
   color: var(--text-color);
   border: 1px solid var(--ui-border);
+  backdrop-filter: blur(8px);
   padding: 1rem;
-  border-radius: 8px;
-  box-shadow: 0 5px 20px rgb(0 0 0 / .2);
-  display: flex;
-  justify-content: space-between;
+  border-radius: 50px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: center;
-  gap: 1rem;
-  font-size: 1rem;
-  font-family: var(--font-ui);
+  gap: 1.5rem;
   z-index: 1100;
-  width: 90%;
-  max-width: 400px;
-  transform: translate(-50%, -180px) translateZ(0);
-  transition: transform 0.3s cubic-bezier(.175, .885, .32, 1.275);
-  will-change: transform
+  width: auto;
+  white-space: nowrap;
+  transform: translate(-50%, -150px);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .toast.visible {
-  transform: translate(-50%, 0) translateZ(0)
+  transform: translate(-50%, 0);
 }
 
 .toast-actions {
+  width: 100%;
   display: flex;
-  gap: 10px
+  gap: 0.8rem;
+}
+
+.btn-primary,
+.btn-ghost {
+  width: 100%;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  border: none;
 }
 
 .btn-primary {
   background: var(--accent-color);
   color: #fff;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: opacity 0.2s ease
-}
-
-.btn-primary:hover {
-  opacity: .9
 }
 
 .btn-ghost {
-  background: #fff0;
+  background: transparent;
   color: var(--text-color);
   border: 1px solid var(--ui-border);
-  padding: 5px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s ease
 }
 
-.btn-ghost:hover {
-  background-color: rgb(0 0 0 / .05)
-}
-
-.chapter {
-  display: block;
-  width: 100%;
-}
-
-@media screen and (max-width:480px) {
-  p {
-    text-align: left
+@media screen and (max-width: 480px) {
+  h1 {
+    font-size: 1.75rem;
   }
-}
-
-@media print {
   
-  .ui-controls,
-  #progress-container,
-  .settings-panel,
   .toast {
-    display: none !important
+    width: 90%;
+    flex-direction: column;
+    border-radius: 12px;
+    gap: 1rem;
   }
   
-  body {
-    background: #fff;
-    color: #000
+  .toast-actions {
+    width: 100%;
+    justify-content: flex-end;
   }
 }

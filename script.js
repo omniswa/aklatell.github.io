@@ -90,7 +90,7 @@ const renderBatch = () => {
         ${isFav ? '❤️' : '🤍'}
       </button>
       <div class="book-emoji" aria-hidden="true">${book.emoji}</div>
-      <h3 class="book-title">${escapeHtml(book.title)}</h3>
+      <h2 class="head3" class="book-title">${escapeHtml(book.title)}</h2>
       <p class="book-author">${escapeHtml(book.author)}</p>
       <p class="book-preview">${escapeHtml(book.preview)}</p>
     `;

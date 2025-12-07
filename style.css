@@ -81,7 +81,7 @@ button {
   display: flex;
   justify-content: space-between;
   flex-direction: column;
-  gap: 1.4pxrem
+  gap: 1.4rem
 }
 
 .sidebar-header h1 {

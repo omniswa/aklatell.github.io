@@ -106,7 +106,7 @@ a {
 }
 
 p {
-  text-align: left;
+  text-align: justify;
   margin-bottom: 1.2em;
   max-width: 65ch;
   margin-left: auto;
@@ -309,6 +309,10 @@ blockquote {
 @media screen and (max-width:480px) {
   h1 {
     font-size: 1.75rem
+  }
+  
+  p {
+    text-align: left;
   }
   
   .toast {

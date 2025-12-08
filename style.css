@@ -376,8 +376,9 @@ input[type="search"]:focus {
 }
 
 .load-more-btn {
-  margin: 3rem auto;
+  margin: auto;
   display: block;
+  margin-top: 2rem;
   padding: .8rem 2.5rem;
   background: var(--text-primary);
   color: var(--bg-body);

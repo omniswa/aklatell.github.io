@@ -17,12 +17,16 @@
 document.addEventListener('DOMContentLoaded', () => {
   const BOOK_ID = 'book_prog_' + window.location.pathname.split('/').pop();
   const fragment = document.createDocumentFragment();
+  
+  // Progress Bar
   const progressContainer = document.createElement('div');
   progressContainer.id = 'progress-container';
   const progressBar = document.createElement('div');
   progressBar.id = 'progress-bar';
   progressContainer.appendChild(progressBar);
   fragment.appendChild(progressContainer);
+  
+  // UI Controls (Menu)
   const uiControls = document.createElement('div');
   uiControls.className = 'ui-controls';
   
@@ -44,6 +48,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const homeBtn = createFab('home-btn', icons.home, 'Home');
   const shareBtn = createFab('share-btn', icons.share, 'Share');
   const settingsBtn = createFab('settings-toggle', icons.settings, 'Settings');
+  
+  // Handlers
   homeBtn.addEventListener('click', () => window.location.href = '../index.html');
   shareBtn.addEventListener('click', async () => {
     try {
@@ -63,6 +69,8 @@ document.addEventListener('DOMContentLoaded', () => {
   
   uiControls.append(homeBtn, shareBtn, settingsBtn);
   fragment.appendChild(uiControls);
+  
+  // Settings Panel
   const settingsPanel = document.createElement('div');
   settingsPanel.className = 'settings-panel';
   settingsPanel.innerHTML = `
@@ -93,12 +101,14 @@ document.addEventListener('DOMContentLoaded', () => {
   `;
   fragment.appendChild(settingsPanel);
   
+  // Toast
   const toast = document.createElement('div');
   toast.className = 'toast';
   toast.innerHTML = `<span>Resume reading?</span><div class="toast-actions"><button class="btn-ghost" id="toast-no">No</button><button class="btn-primary" id="toast-yes">Yes</button></div>`;
   fragment.appendChild(toast);
   document.body.appendChild(fragment);
   
+  // State Management
   const state = {
     theme: localStorage.getItem('reader_theme') || 'light',
     font: localStorage.getItem('reader_font') || 'Arial',
@@ -151,8 +161,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
   
+  // Scroll & Progress Logic (Simplified)
   let docHeight = 0;
-  let lastScrollTop = 0;
   
   function calculateDocHeight() {
     docHeight = document.documentElement.scrollHeight - window.innerHeight
@@ -163,17 +173,13 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   
   resizeObserver.observe(document.body);
+  
   const handleScroll = () => {
     const scrollTop = window.scrollY;
     const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
     progressBar.style.width = Math.min(progress, 100) + '%';
-    if (scrollTop > lastScrollTop && scrollTop > 100) {
-      uiControls.classList.add('hidden');
-      settingsPanel.classList.remove('active')
-    } else {
-      uiControls.classList.remove('hidden')
-    }
-    lastScrollTop = Math.max(0, scrollTop);
+    
+    // Auto-save progress logic
     clearTimeout(window.saveTimeout);
     window.saveTimeout = setTimeout(() => {
       localStorage.setItem(BOOK_ID, progress)
@@ -184,6 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
     passive: !0
   });
   
+  // Init Logic
   const savedProgress = parseFloat(localStorage.getItem(BOOK_ID));
   if (savedProgress > 0) {
     setTimeout(() => toast.classList.add('visible'), 500);

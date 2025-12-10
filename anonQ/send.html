@@ -6,26 +6,33 @@
     <title>Send Message - AnonQ</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <div class="container send-container">
-        <div class="profile-header">
-            <img id="target-avatar" src="" alt="Avatar" class="avatar-small">
-            <p>Send an anonymous message to <span id="target-user">User</span></p>
+<body id="page-send">
+    <div class="container text-center">
+        <div class="profile-card">
+            <img id="target-avatar" src="" alt="Avatar" class="avatar">
+            <h2 style="margin-bottom: 5px;">Send a Message</h2>
+            <p>To: <span id="target-username" style="color: var(--accent); font-weight: bold;">...</span></p>
+            <p style="font-size: 0.8rem;">They won't know it's you.</p>
         </div>
 
-        <form id="msg-form">
-            <textarea id="msg-text" placeholder="Type your secret message here..." maxlength="500" required></textarea>
-            <div class="char-count"><span id="chars">0</span>/500</div>
-            <button type="submit" class="btn-primary">Send Anonymously</button>
+        <form id="msg-form" class="card">
+            <div class="form-group">
+                <textarea id="msg-text" placeholder="Type your secret message here..." maxlength="500" required></textarea>
+                <div style="text-align: right; font-size: 0.8rem; color: var(--text-secondary); margin-top: 5px;">
+                    <span id="chars">0</span>/500
+                </div>
+            </div>
+            <button type="submit" class="btn-primary">Send Anonymously 🚀</button>
         </form>
 
-        <div id="success-message" class="hidden">
-            <h3>Message Sent! 🚀</h3>
-            <p>Your identity is safe.</p>
-            <a href="index.html">Get your own inbox</a>
+        <div id="success-message" class="card hidden text-center">
+            <h2 style="color: var(--success);">Message Sent! 🎉</h2>
+            <p>Your identity remains a secret.</p>
+            <a href="index.html" class="btn-secondary" style="display: block; text-decoration: none; padding: 10px; margin-top: 15px;">Get your own inbox</a>
         </div>
     </div>
 
+    <div id="toast-container"></div>
     <script type="module" src="app.js"></script>
 </body>
 </html>

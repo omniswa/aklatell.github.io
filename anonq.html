@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anonymous Q&A</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --bg-primary: #0f1419;
+      --bg-secondary: #1a1f2e;
+      --bg-tertiary: #252d3d;
+      --text-primary: #e7e9ea;
+      --text-secondary: #8b98a5;
+      --accent: #1d9bf0;
+      --accent-hover: #1a8cd8;
+      --danger: #f4212e;
+      --success: #00ba7c;
+      --border: #2f3336;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .header {
+      text-align: center;
+      padding: 40px 20px;
+      background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+      border-radius: 16px;
+      margin-bottom: 30px;
+    }
+    
+    .header h1 {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, var(--accent), #00ba7c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .header p {
+      color: var(--text-secondary);
+    }
+    
+    .card {
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+      border: 1px solid var(--border);
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+    
+    input,
+    textarea {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+    
+    input:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(29, 155, 240, 0.1);
+    }
+    
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+      font-family: inherit;
+    }
+    
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      width: 100%;
+    }
+    
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+    
+    .btn-secondary {
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+    
+    .btn-secondary:hover {
+      background: var(--bg-primary);
+    }
+    
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+    }
+    
+    .btn-danger:hover {
+      opacity: 0.9;
+    }
+    
+    .avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      display: block;
+      border: 3px solid var(--border);
+    }
+    
+    .profile-info {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    
+    .username {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    
+    .share-link {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+    
+    .share-link input {
+      flex: 1;
+    }
+    
+    .share-link button {
+      width: auto;
+      padding: 12px 20px;
+    }
+    
+    .message-item {
+      background: var(--bg-tertiary);
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      border: 1px solid var(--border);
+    }
+    
+    .message-content {
+      margin-bottom: 12px;
+      word-wrap: break-word;
+    }
+    
+    .message-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+    
+    .message-actions {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .message-actions button {
+      padding: 6px 12px;
+      font-size: 0.85rem;
+      width: auto;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-secondary);
+    }
+    
+    .empty-state svg {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+    
+    .alert {
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 0.9rem;
+    }
+    
+    .alert-success {
+      background: rgba(0, 186, 124, 0.1);
+      color: var(--success);
+      border: 1px solid rgba(0, 186, 124, 0.2);
+    }
+    
+    .alert-error {
+      background: rgba(244, 33, 46, 0.1);
+      color: var(--danger);
+      border: 1px solid rgba(244, 33, 46, 0.2);
+    }
+    
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .nav-tab {
+      padding: 12px 24px;
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    
+    .nav-tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+    
+    .hidden {
+      display: none !important;
+    }
+    
+    .text-link {
+      color: var(--accent);
+      text-decoration: none;
+      cursor: pointer;
+    }
+    
+    .text-link:hover {
+      text-decoration: underline;
+    }
+    
+    .text-center {
+      text-align: center;
+    }
+    
+    .mt-2 {
+      margin-top: 16px;
+    }
+    
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 0.8s linear infinite;
+    }
+    
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    
+    .char-count {
+      text-align: right;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+    
+    @media (max-width: 640px) {
+      .container {
+        padding: 12px;
+      }
+      
+      .header h1 {
+        font-size: 1.5rem;
+      }
+      
+      .card {
+        padding: 16px;
+      }
+      
+      .nav-tab {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <!-- Auth Screen -->
+    <div id="authScreen">
+      <div class="header">
+        <h1>🎭 Anonymous Q&A</h1>
+        <p>Receive anonymous messages from anyone</p>
+      </div>
+      
+      <div class="card">
+        <div class="nav-tabs">
+          <button class="nav-tab active" onclick="switchAuthTab('login')">Login</button>
+          <button class="nav-tab" onclick="switchAuthTab('signup')">Sign Up</button>
+        </div>
+        
+        <div id="alertContainer"></div>
+        
+        <!-- Login Form -->
+        <form id="loginForm">
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="loginEmail" required>
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="loginPassword" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+        
+        <!-- Signup Form -->
+        <form id="signupForm" class="hidden">
+          <div class="form-group">
+            <label>Username</label>
+            <input type="text" id="signupUsername" pattern="[a-zA-Z0-9_]{3,20}" required placeholder="3-20 characters, letters, numbers, underscore">
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="signupEmail" required>
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="signupPassword" minlength="6" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Create Account</button>
+        </form>
+      </div>
+    </div>
+    
+    <!-- Main App -->
+    <div id="appScreen" class="hidden">
+      <div class="card">
+        <div class="profile-info">
+          <img id="userAvatar" class="avatar" src="" alt="Avatar">
+          <div class="username" id="displayUsername"></div>
+          <div class="share-link">
+            <input type="text" id="shareableLink" readonly>
+            <button class="btn btn-primary" onclick="copyLink()">Copy</button>
+          </div>
+        </div>
+        <button class="btn btn-danger" onclick="logout()">Logout</button>
+      </div>
+      
+      <div class="nav-tabs">
+        <button class="nav-tab active" onclick="switchTab('inbox')">Inbox</button>
+        <button class="nav-tab" onclick="switchTab('profile')">Profile</button>
+      </div>
+      
+      <!-- Inbox Tab -->
+      <div id="inboxTab">
+        <div id="messagesList"></div>
+      </div>
+      
+      <!-- Profile Tab -->
+      <div id="profileTab" class="hidden">
+        <div class="card">
+          <h3 style="margin-bottom: 16px;">Update Profile</h3>
+          <div class="form-group">
+            <label>Username</label>
+            <input type="text" id="updateUsername" pattern="[a-zA-Z0-9_]{3,20}">
+          </div>
+          <button class="btn btn-primary" onclick="updateUsername()">Update Username</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Send Message Screen -->
+    <div id="sendMessageScreen" class="hidden">
+      <div class="header">
+        <h1>🎭 Anonymous Q&A</h1>
+        <p>Send an anonymous message</p>
+      </div>
+      
+      <div class="card">
+        <div class="profile-info">
+          <img id="recipientAvatar" class="avatar" src="" alt="Avatar">
+          <div class="username" id="recipientUsername"></div>
+        </div>
+        
+        <div id="sendAlertContainer"></div>
+        
+        <form id="sendMessageForm">
+          <div class="form-group">
+            <label>Your Anonymous Message</label>
+            <textarea id="messageContent" maxlength="500" required placeholder="Send a kind message or ask a question..."></textarea>
+            <div class="char-count"><span id="charCount">0</span>/500</div>
+          </div>
+          <button type="submit" class="btn btn-primary">Send Message</button>
+        </form>
+        
+        <div class="text-center mt-2">
+          <a href="/" class="text-link">Create your own Q&A page</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Firebase SDK -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.22.0/firebase-app-compat.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.22.0/firebase-auth-compat.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.22.0/firebase-firestore-compat.min.js"></script>
+  
+  <script>
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyBMxV7RKFBLSZaZMWIjnY54izDrrY2R5vI",
+      authDomain: "anonq-app.firebaseapp.com",
+      databaseURL: "https://anonq-app-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "anonq-app",
+      storageBucket: "anonq-app.firebasestorage.app",
+      messagingSenderId: "490833512418",
+      appId: "1:490833512418:web:c8e43e4e6d090b5a579bbb",
+      measurementId: "G-8TQYXDS7BL"
+    };
+    
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    
+    // State
+    let currentUser = null;
+    let messageListener = null;
+    
+    // Generate avatar from username
+    function generateAvatar(username) {
+      const colors = ['FF6B6B', '4ECDC4', '45B7D1', 'FFA07A', '98D8C8', 'F7DC6F', 'BB8FCE', '85C1E2'];
+      const hash = username.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+      const colorIndex = hash % colors.length;
+      return `https://ui-avatars.com/api/?name=${username}&background=${colors[colorIndex]}&color=fff&size=200&bold=true`;
+    }
+    
+    // Show alert
+    function showAlert(message, type = 'error', container = 'alertContainer') {
+      const alertDiv = document.createElement('div');
+      alertDiv.className = `alert alert-${type}`;
+      alertDiv.textContent = message;
+      const cont = document.getElementById(container);
+      cont.innerHTML = '';
+      cont.appendChild(alertDiv);
+      setTimeout(() => alertDiv.remove(), 5000);
+    }
+    
+    // Auth tab switching
+    function switchAuthTab(tab) {
+      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      if (tab === 'login') {
+        document.getElementById('loginForm').classList.remove('hidden');
+        document.getElementById('signupForm').classList.add('hidden');
+      } else {
+        document.getElementById('loginForm').classList.add('hidden');
+        document.getElementById('signupForm').classList.remove('hidden');
+      }
+      document.getElementById('alertContainer').innerHTML = '';
+    }
+    
+    // Main app tab switching
+    function switchTab(tab) {
+      document.querySelectorAll('#appScreen .nav-tab').forEach(t => t.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      if (tab === 'inbox') {
+        document.getElementById('inboxTab').classList.remove('hidden');
+        document.getElementById('profileTab').classList.add('hidden');
+      } else {
+        document.getElementById('inboxTab').classList.add('hidden');
+        document.getElementById('profileTab').classList.remove('hidden');
+      }
+    }
+    
+    // Sanitize username
+    function sanitizeUsername(username) {
+      return username.toLowerCase().replace(/[^a-z0-9_]/g, '').substring(0, 20);
+    }
+    
+    // Check if username exists
+    async function usernameExists(username) {
+      const snapshot = await db.collection('users').where('username', '==', username).get();
+      return !snapshot.empty;
+    }
+    
+    // Login
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      
+      try {
+        await auth.signInWithEmailAndPassword(email, password);
+      } catch (error) {
+        showAlert(error.message);
+      }
+    });
+    
+    // Signup
+    document.getElementById('signupForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = sanitizeUsername(document.getElementById('signupUsername').value);
+      const email = document.getElementById('signupEmail').value.trim();
+      const password = document.getElementById('signupPassword').value;
+      
+      if (username.length < 3) {
+        showAlert('Username must be at least 3 characters');
+        return;
+      }
+      
+      try {
+        // Check username availability
+        if (await usernameExists(username)) {
+          showAlert('Username already taken');
+          return;
+        }
+        
+        // Create user
+        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+        const user = userCredential.user;
+        
+        // Create user profile
+        await db.collection('users').doc(user.uid).set({
+          username: username,
+          email: email,
+          avatar: generateAvatar(username),
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        
+        showAlert('Account created successfully!', 'success');
+      } catch (error) {
+        showAlert(error.message);
+      }
+    });
+    
+    // Load user profile
+    async function loadUserProfile() {
+      if (!currentUser) return;
+      
+      const doc = await db.collection('users').doc(currentUser.uid).get();
+      if (doc.exists) {
+        const data = doc.data();
+        document.getElementById('userAvatar').src = data.avatar;
+        document.getElementById('displayUsername').textContent = '@' + data.username;
+        document.getElementById('shareableLink').value = `${window.location.origin}?u=${data.username}`;
+        document.getElementById('updateUsername').value = data.username;
+        
+        loadMessages();
+      }
+    }
+    
+    // Load messages
+    function loadMessages() {
+      if (messageListener) messageListener();
+      
+      const messagesList = document.getElementById('messagesList');
+      messagesList.innerHTML = '<div class="text-center"><div class="loading"></div></div>';
+      
+      messageListener = db.collection('messages')
+        .where('recipientId', '==', currentUser.uid)
+        .orderBy('timestamp', 'desc')
+        .limit(50)
+        .onSnapshot((snapshot) => {
+          if (snapshot.empty) {
+            messagesList.innerHTML = `
+                            <div class="empty-state">
+                                <svg fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+                                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+                                </svg>
+                                <h3>No messages yet</h3>
+                                <p>Share your link to start receiving anonymous messages!</p>
+                            </div>
+                        `;
+            return;
+          }
+          
+          messagesList.innerHTML = '';
+          snapshot.forEach((doc) => {
+            const msg = doc.data();
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message-item';
+            messageDiv.innerHTML = `
+                            <div class="message-content">${escapeHtml(msg.content)}</div>
+                            <div class="message-meta">
+                                <span>${formatDate(msg.timestamp)}</span>
+                                <div class="message-actions">
+                                    <button class="btn btn-danger" onclick="deleteMessage('${doc.id}')">Delete</button>
+                                </div>
+                            </div>
+                        `;
+            messagesList.appendChild(messageDiv);
+          });
+        });
+    }
+    
+    // Delete message
+    async function deleteMessage(messageId) {
+      if (!confirm('Delete this message?')) return;
+      
+      try {
+        await db.collection('messages').doc(messageId).delete();
+        showAlert('Message deleted', 'success');
+      } catch (error) {
+        showAlert('Failed to delete message');
+      }
+    }
+    
+    // Update username
+    async function updateUsername() {
+      const newUsername = sanitizeUsername(document.getElementById('updateUsername').value);
+      
+      if (newUsername.length < 3) {
+        showAlert('Username must be at least 3 characters');
+        return;
+      }
+      
+      try {
+        const currentDoc = await db.collection('users').doc(currentUser.uid).get();
+        const currentUsername = currentDoc.data().username;
+        
+        if (newUsername === currentUsername) {
+          showAlert('This is already your username');
+          return;
+        }
+        
+        if (await usernameExists(newUsername)) {
+          showAlert('Username already taken');
+          return;
+        }
+        
+        await db.collection('users').doc(currentUser.uid).update({
+          username: newUsername,
+          avatar: generateAvatar(newUsername)
+        });
+        
+        showAlert('Username updated!', 'success');
+        loadUserProfile();
+      } catch (error) {
+        showAlert('Failed to update username');
+      }
+    }
+    
+    // Copy link
+    function copyLink() {
+      const linkInput = document.getElementById('shareableLink');
+      linkInput.select();
+      document.execCommand('copy');
+      showAlert('Link copied to clipboard!', 'success');
+    }
+    
+    // Logout
+    async function logout() {
+      if (messageListener) messageListener();
+      await auth.signOut();
+    }
+    
+    // Load recipient profile for sending message
+    async function loadRecipientProfile(username) {
+      const snapshot = await db.collection('users').where('username', '==', username).get();
+      
+      if (snapshot.empty) {
+        document.getElementById('sendMessageScreen').innerHTML = `
+                    <div class="header">
+                        <h1>User Not Found</h1>
+                        <p>This user doesn't exist</p>
+                    </div>
+                    <div class="card text-center">
+                        <a href="/" class="text-link">Go to homepage</a>
+                    </div>
+                `;
+        return null;
+      }
+      
+      const userData = snapshot.docs[0].data();
+      const userId = snapshot.docs[0].id;
+      
+      document.getElementById('recipientAvatar').src = userData.avatar;
+      document.getElementById('recipientUsername').textContent = '@' + userData.username;
+      
+      return userId;
+    }
+    
+    // Send message form
+    let recipientUserId = null;
+    document.getElementById('sendMessageForm')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const content = document.getElementById('messageContent').value.trim();
+      
+      if (!content || content.length > 500) {
+        showAlert('Message must be between 1 and 500 characters', 'error', 'sendAlertContainer');
+        return;
+      }
+      
+      // Rate limiting check
+      const recentMessages = await db.collection('messages')
+        .where('recipientId', '==', recipientUserId)
+        .where('timestamp', '>', new Date(Date.now() - 60000))
+        .get();
+      
+      if (recentMessages.size >= 3) {
+        showAlert('Too many messages. Please wait a minute.', 'error', 'sendAlertContainer');
+        return;
+      }
+      
+      try {
+        await db.collection('messages').add({
+          recipientId: recipientUserId,
+          content: content,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+          reported: false
+        });
+        
+        showAlert('Message sent anonymously!', 'success', 'sendAlertContainer');
+        document.getElementById('messageContent').value = '';
+        document.getElementById('charCount').textContent = '0';
+      } catch (error) {
+        showAlert('Failed to send message', 'error', 'sendAlertContainer');
+      }
+    });
+    
+    // Character counter
+    document.getElementById('messageContent')?.addEventListener('input', (e) => {
+      document.getElementById('charCount').textContent = e.target.value.length;
+    });
+    
+    // Auth state observer
+    auth.onAuthStateChanged(async (user) => {
+      currentUser = user;
+      
+      if (user) {
+        document.getElementById('authScreen').classList.add('hidden');
+        document.getElementById('appScreen').classList.remove('hidden');
+        document.getElementById('sendMessageScreen').classList.add('hidden');
+        await loadUserProfile();
+      } else {
+        const urlParams = new URLSearchParams(window.location.search);
+        const username = urlParams.get('u');
+        
+        if (username) {
+          document.getElementById('authScreen').classList.add('hidden');
+          document.getElementById('appScreen').classList.add('hidden');
+          document.getElementById('sendMessageScreen').classList.remove('hidden');
+          recipientUserId = await loadRecipientProfile(username);
+        } else {
+          document.getElementById('authScreen').classList.remove('hidden');
+          document.getElementById('appScreen').classList.add('hidden');
+          document.getElementById('sendMessageScreen').classList.add('hidden');
+        }
+      }
+    });
+    
+    // Utility functions
+    function escapeHtml(text) {
+      const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      };
+      return text.replace(/[&<>"']/g, m => map[m]);
+    }
+    
+    function formatDate(timestamp) {
+      if (!timestamp) return 'Just now';
+      const date = timestamp.toDate();
+      const now = new Date();
+      const diff = now - date;
+      
+      if (diff < 60000) return 'Just now';
+      if (diff < 3600000) return Math.floor(diff / 60000) + 'm ago';
+      if (diff < 86400000) return Math.floor(diff / 3600000) + 'h ago';
+      return Math.floor(diff / 86400000) + 'd ago';
+    }
+  </script>
+</body>
+
+</html>

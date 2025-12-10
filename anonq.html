@@ -595,7 +595,8 @@
         const data = doc.data();
         document.getElementById('userAvatar').src = data.avatar;
         document.getElementById('displayUsername').textContent = '@' + data.username;
-        document.getElementById('shareableLink').value = `${window.location.origin}?u=${data.username}`;
+        document.getElementById('shareableLink').value =
+          `${window.location.origin}${window.location.pathname}?u=${data.username}`;
         document.getElementById('updateUsername').value = data.username;
         
         loadMessages();

@@ -778,30 +778,35 @@
       document.getElementById('charCount').textContent = e.target.value.length;
     });
     
-    // Auth state observer
-    auth.onAuthStateChanged(async (user) => {
-      currentUser = user;
+    // Check URL parameters on load
+    async function checkUrlAndRoute() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const username = urlParams.get('u');
       
-      if (user) {
+      // If there's a username parameter, show send message screen
+      if (username) {
+        document.getElementById('authScreen').classList.add('hidden');
+        document.getElementById('appScreen').classList.add('hidden');
+        document.getElementById('sendMessageScreen').classList.remove('hidden');
+        recipientUserId = await loadRecipientProfile(username);
+      } else if (currentUser) {
+        // User is logged in, show app
         document.getElementById('authScreen').classList.add('hidden');
         document.getElementById('appScreen').classList.remove('hidden');
         document.getElementById('sendMessageScreen').classList.add('hidden');
         await loadUserProfile();
       } else {
-        const urlParams = new URLSearchParams(window.location.search);
-        const username = urlParams.get('u');
-        
-        if (username) {
-          document.getElementById('authScreen').classList.add('hidden');
-          document.getElementById('appScreen').classList.add('hidden');
-          document.getElementById('sendMessageScreen').classList.remove('hidden');
-          recipientUserId = await loadRecipientProfile(username);
-        } else {
-          document.getElementById('authScreen').classList.remove('hidden');
-          document.getElementById('appScreen').classList.add('hidden');
-          document.getElementById('sendMessageScreen').classList.add('hidden');
-        }
+        // No username param and not logged in, show auth
+        document.getElementById('authScreen').classList.remove('hidden');
+        document.getElementById('appScreen').classList.add('hidden');
+        document.getElementById('sendMessageScreen').classList.add('hidden');
       }
+    }
+    
+    // Auth state observer
+    auth.onAuthStateChanged(async (user) => {
+      currentUser = user;
+      await checkUrlAndRoute();
     });
     
     // Utility functions

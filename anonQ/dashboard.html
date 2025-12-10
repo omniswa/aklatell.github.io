@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AnonQ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <div class="logo">AnonQ</div>
+        <button id="logout-btn">Logout</button>
+    </nav>
+
+    <div class="container">
+        <div class="profile-card">
+            <img id="user-avatar" src="" alt="Avatar" class="avatar">
+            <h2 id="user-email">Loading...</h2>
+            <div class="share-section">
+                <p>Your public link:</p>
+                <div class="link-box">
+                    <input type="text" id="share-link" readonly>
+                    <button id="copy-btn">Copy</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="inbox">
+            <h3>Inbox</h3>
+            <div id="messages-list">
+                <div class="loader">Loading messages...</div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>

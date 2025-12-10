@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Message - AnonQ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container send-container">
+        <div class="profile-header">
+            <img id="target-avatar" src="" alt="Avatar" class="avatar-small">
+            <p>Send an anonymous message to <span id="target-user">User</span></p>
+        </div>
+
+        <form id="msg-form">
+            <textarea id="msg-text" placeholder="Type your secret message here..." maxlength="500" required></textarea>
+            <div class="char-count"><span id="chars">0</span>/500</div>
+            <button type="submit" class="btn-primary">Send Anonymously</button>
+        </form>
+
+        <div id="success-message" class="hidden">
+            <h3>Message Sent! 🚀</h3>
+            <p>Your identity is safe.</p>
+            <a href="index.html">Get your own inbox</a>
+        </div>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>

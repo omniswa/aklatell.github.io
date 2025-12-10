@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Real-time Chat App</title>
+  <link rel="stylesheet" href="chat.css">
+</head>
+
+<body>
+  <div class="container">
+    <!-- Auth Screen -->
+    <div class="auth-screen" id="authScreen">
+      <div class="auth-form">
+        <h2 id="authTitle">Sign In</h2>
+        <form id="authForm">
+          <div class="input-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" required placeholder="Enter your email">
+          </div>
+          <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" required placeholder="Enter your password">
+          </div>
+          <div class="input-group" id="displayNameGroup" style="display: none;">
+            <label for="displayName">Display Name</label>
+            <input type="text" id="displayName" placeholder="Enter your name">
+          </div>
+          <button type="submit" class="btn" id="authSubmitBtn">Sign In</button>
+          <button type="button" class="btn btn-secondary" id="authToggleBtn">Create Account</button>
+          <div class="error-msg" id="authError"></div>
+        </form>
+      </div>
+    </div>
+    
+    <!-- Chat Interface -->
+    <div class="chat-container" id="chatContainer">
+      <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <h3>Chat Rooms</h3>
+          <div class="user-info" id="userInfo"></div>
+          <button class="logout-btn" id="logoutBtn">Logout</button>
+        </div>
+        <div class="rooms-list" id="roomsList"></div>
+        <div class="add-room" id="addRoomSection" style="display: none;">
+          <input type="text" id="newRoomInput" placeholder="New room name..." />
+        </div>
+      </div>
+      
+      <div class="chat-main">
+        <div class="chat-header">
+          <button class="menu-btn" id="menuBtn">&#9776;</button>
+          <h2 id="currentRoomName">Select a room</h2>
+        </div>
+        <div class="messages-container" id="messagesContainer">
+          <div class="empty-state">
+            <div class="empty-state-icon">💬</div>
+            <p>Select a room to start chatting</p>
+          </div>
+        </div>
+        <div class="message-input-container">
+          <form class="message-input-form" id="messageForm">
+            <input type="text" class="message-input" id="messageInput" placeholder="Type a message..." disabled />
+            <button type="submit" class="send-btn" id="sendBtn" disabled>Send</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="chat.js" type="module"></script>
+</body>
+
+</html>

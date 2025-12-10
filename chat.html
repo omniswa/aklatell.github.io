@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Realtime Chat App</title>
+  <style>
+    /* CSS for responsive UI/UX */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+    }
+    
+    .container {
+      width: 100%;
+      max-width: 600px;
+      background: white;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    
+    #auth-section,
+    #chat-section {
+      padding: 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    #auth-section {
+      justify-content: center;
+    }
+    
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    input,
+    button {
+      margin: 10px 0;
+      padding: 10px;
+      font-size: 16px;
+    }
+    
+    #toggle-auth {
+      cursor: pointer;
+      color: blue;
+      text-decoration: underline;
+    }
+    
+    #chat-header {
+      background: #007bff;
+      color: white;
+      padding: 10px;
+      text-align: center;
+    }
+    
+    #messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .message {
+      margin: 5px 0;
+      display: flex;
+      align-items: flex-start;
+    }
+    
+    .message.self {
+      justify-content: flex-end;
+    }
+    
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+    
+    .message.self .avatar {
+      margin-left: 10px;
+      margin-right: 0;
+    }
+    
+    .content {
+      background: #e0e0e0;
+      padding: 10px;
+      border-radius: 10px;
+      max-width: 70%;
+    }
+    
+    .message.self .content {
+      background: #007bff;
+      color: white;
+    }
+    
+    .date-separator {
+      text-align: center;
+      color: gray;
+      margin: 10px 0;
+    }
+    
+    #load-more {
+      text-align: center;
+      cursor: pointer;
+      color: blue;
+      margin: 10px 0;
+    }
+    
+    #input-section {
+      display: flex;
+      padding: 10px;
+      border-top: 1px solid #ddd;
+    }
+    
+    #message-input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    
+    #send-btn {
+      padding: 10px 20px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+    
+    /* Mobile optimizations */
+    @media (max-width: 600px) {
+      .container {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div id="auth-section">
+      <h2 id="auth-title">Sign In</h2>
+      <form id="auth-form">
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <input type="text" id="username" placeholder="Username (max 12 chars)" maxLength="12" style="display: none;" required>
+        <button type="submit">Sign In</button>
+      </form>
+      <span id="toggle-auth">Don't have an account? Sign Up</span>
+      <p id="auth-error" style="color: red;"></p>
+    </div>
+    <div id="chat-section" style="display: none;">
+      <div id="chat-header">Chat App</div>
+      <div id="messages"></div>
+      <div id="input-section">
+        <input id="message-input" placeholder="Type a message...">
+        <button id="send-btn">Send</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Firebase CDN (compat mode for vanilla JS) -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+  
+  <!-- Multiavatar for neutral avatars -->
+  <script src="https://cdn.jsdelivr.net/npm/@multiavatar/multiavatar/multiavatar.min.js"></script>
+  
+  <script>
+    // Replace with your own Firebase config from console
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+    
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.database();
+    
+    // Elements
+    const authSection = document.getElementById('auth-section');
+    const chatSection = document.getElementById('chat-section');
+    const authTitle = document.getElementById('auth-title');
+    const authForm = document.getElementById('auth-form');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const usernameInput = document.getElementById('username');
+    const toggleAuth = document.getElementById('toggle-auth');
+    const authError = document.getElementById('auth-error');
+    const messagesDiv = document.getElementById('messages');
+    const messageInput = document.getElementById('message-input');
+    const sendBtn = document.getElementById('send-btn');
+    
+    let isSignup = false;
+    let currentUser = null;
+    let lastVisibleKey = null;
+    let messages = []; // Local cache for performance
+    const PAGE_SIZE = 20; // Cost-efficient page size
+    
+    // Toggle signin/signup
+    toggleAuth.addEventListener('click', () => {
+      isSignup = !isSignup;
+      authTitle.textContent = isSignup ? 'Sign Up' : 'Sign In';
+      toggleAuth.textContent = isSignup ? 'Already have an account? Sign In' : "Don't have an account? Sign Up";
+      usernameInput.style.display = isSignup ? 'block' : 'none';
+      authForm.querySelector('button').textContent = isSignup ? 'Sign Up' : 'Sign In';
+    });
+    
+    // Auth form submit
+    authForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = emailInput.value.trim();
+      const password = passwordInput.value.trim();
+      authError.textContent = '';
+      
+      if (isSignup) {
+        const username = usernameInput.value.trim();
+        if (username.length === 0 || username.length > 12) {
+          authError.textContent = 'Username must be 1-12 characters.';
+          return;
+        }
+        signup(email, password, username);
+      } else {
+        signin(email, password);
+      }
+    });
+    
+    // Signup function
+    function signup(email, password, username) {
+      // Check username uniqueness
+      db.ref('usernames/' + username).once('value').then(snapshot => {
+        if (snapshot.exists()) {
+          authError.textContent = 'Username taken.';
+          return;
+        }
+        auth.createUserWithEmailAndPassword(email, password)
+          .then(userCredential => {
+            const uid = userCredential.user.uid;
+            // Save username and user data
+            db.ref('usernames/' + username).set(uid);
+            db.ref('users/' + uid).set({ username, email });
+          })
+          .catch(error => {
+            authError.textContent = error.message;
+          });
+      });
+    }
+    
+    // Signin function
+    function signin(email, password) {
+      auth.signInWithEmailAndPassword(email, password)
+        .catch(error => {
+          authError.textContent = error.message;
+        });
+    }
+    
+    // Auth state listener
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        currentUser = user;
+        authSection.style.display = 'none';
+        chatSection.style.display = 'flex';
+        loadUserData(user.uid);
+        setupChat();
+      } else {
+        currentUser = null;
+        authSection.style.display = 'flex';
+        chatSection.style.display = 'none';
+        // Detach listeners for cost efficiency
+        db.ref('messages').off();
+      }
+    });
+    
+    // Load user data
+    let userData = {};
+    
+    function loadUserData(uid) {
+      db.ref('users/' + uid).once('value').then(snapshot => {
+        userData = snapshot.val();
+      });
+    }
+    
+    // Setup chat
+    function setupChat() {
+      // Load initial messages
+      loadMessages(true);
+      
+      // Realtime listener for new messages
+      const messagesRef = db.ref('messages');
+      messagesRef.orderByKey().limitToLast(1).on('child_added', snapshot => {
+        if (lastVisibleKey && snapshot.key > lastVisibleKey) { // Only add new
+          addMessage(snapshot.val(), snapshot.key);
+        }
+      });
+      
+      // Send message
+      sendBtn.addEventListener('click', sendMessage);
+      messageInput.addEventListener('keypress', e => {
+        if (e.key === 'Enter') sendMessage();
+      });
+      
+      // Load more on scroll top
+      messagesDiv.addEventListener('scroll', () => {
+        if (messagesDiv.scrollTop === 0) {
+          loadMessages(false);
+        }
+      });
+    }
+    
+    // Send message
+    function sendMessage() {
+      const text = messageInput.value.trim();
+      if (!text) return;
+      const message = {
+        uid: currentUser.uid,
+        text,
+        timestamp: firebase.database.ServerValue.TIMESTAMP
+      };
+      db.ref('messages').push(message);
+      messageInput.value = '';
+      // Scroll to bottom
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+    
+    // Load messages (initial or more)
+    function loadMessages(isInitial) {
+      const ref = db.ref('messages').orderByKey();
+      let query = ref.limitToLast(PAGE_SIZE);
+      if (!isInitial && lastVisibleKey) {
+        query = ref.endBefore(lastVisibleKey).limitToLast(PAGE_SIZE);
+      }
+      
+      query.once('value').then(snapshot => {
+        const newMessages = [];
+        snapshot.forEach(child => {
+          newMessages.push({ key: child.key, ...child.val() });
+        });
+        // Prepend older messages
+        if (!isInitial) {
+          messages = newMessages.concat(messages);
+        } else {
+          messages = newMessages.reverse(); // Latest at bottom
+        }
+        if (newMessages.length > 0) {
+          lastVisibleKey = newMessages[0].key; // Update for next load
+        }
+        renderMessages();
+        if (isInitial) {
+          messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+      });
+    }
+    
+    // Render messages with date separators
+    function renderMessages() {
+      messagesDiv.innerHTML = '';
+      let prevDate = null;
+      messages.forEach(msg => {
+        const date = new Date(msg.timestamp).toDateString();
+        if (date !== prevDate) {
+          const separator = document.createElement('div');
+          separator.className = 'date-separator';
+          separator.textContent = date;
+          messagesDiv.appendChild(separator);
+          prevDate = date;
+        }
+        addMessageToDOM(msg);
+      });
+    }
+    
+    // Add single message (for realtime)
+    function addMessage(msg, key) {
+      messages.push({ key, ...msg });
+      const date = new Date(msg.timestamp).toDateString();
+      if (messages.length > 1) {
+        const prevMsg = messages[messages.length - 2];
+        const prevDate = new Date(prevMsg.timestamp).toDateString();
+        if (date !== prevDate) {
+          const separator = document.createElement('div');
+          separator.className = 'date-separator';
+          separator.textContent = date;
+          messagesDiv.appendChild(separator);
+        }
+      }
+      addMessageToDOM({ key, ...msg });
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+    
+    // Add message to DOM
+    function addMessageToDOM(msg) {
+      const div = document.createElement('div');
+      div.className = 'message' + (msg.uid === currentUser.uid ? ' self' : '');
+      const avatarDiv = document.createElement('div');
+      avatarDiv.innerHTML = multiavatar(userData.username || 'default'); // Generate avatar SVG
+      const avatarImg = avatarDiv.querySelector('svg');
+      avatarImg.style.width = '40px';
+      avatarImg.style.height = '40px';
+      div.appendChild(avatarImg);
+      const content = document.createElement('div');
+      content.className = 'content';
+      content.textContent = msg.text;
+      div.appendChild(content);
+      messagesDiv.appendChild(div);
+    }
+  </script>
+</body>
+
+</html>

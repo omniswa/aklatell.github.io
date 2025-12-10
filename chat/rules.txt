@@ -1,0 +1,90 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+    
+    function isAdmin() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    function isValidRoomName(name) {
+      return name is string &&
+        name.size() > 0 &&
+        name.size() <= 50;
+    }
+    
+    function isValidMessage(message) {
+      return message.text is string &&
+        message.text.size() > 0 &&
+        message.text.size() <= 1000 &&
+        message.userId == request.auth.uid &&
+        message.email == request.auth.token.email &&
+        message.timestamp == request.time;
+    }
+    
+    function rateLimit() {
+      // Allow users to write once per second
+      return request.time > resource.data.timestamp + duration.value(1, 's');
+    }
+    
+    // Rooms collection
+    match /rooms/{roomId} {
+      // Anyone authenticated can read rooms
+      allow read: if isSignedIn();
+      
+      // Only admins can create rooms
+      allow create: if isSignedIn() && isAdmin() &&
+        request.resource.data.name is string &&
+        isValidRoomName(request.resource.data.name) &&
+        request.resource.data.createdBy == request.auth.uid &&
+        request.resource.data.createdAt == request.time &&
+        request.resource.data.messageCount == 0;
+      
+      // Only admins can delete rooms
+      allow delete: if isSignedIn() && isAdmin();
+      
+      // Allow increment of message count (by any user, but controlled by subcollection writes)
+      allow update: if isSignedIn() &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['messageCount']) &&
+        request.resource.data.messageCount == resource.data.messageCount + 1;
+      
+      // Messages subcollection
+      match /messages/{messageId} {
+        // Anyone in the room can read messages
+        allow read: if isSignedIn();
+        
+        // Only authenticated users can create messages
+        allow create: if isSignedIn() &&
+          isValidMessage(request.resource.data) &&
+          request.resource.data.keys().hasOnly(['text', 'userId', 'email', 'displayName', 'timestamp']);
+        
+        // Users can only delete their own messages
+        allow delete: if isSignedIn() &&
+          isOwner(resource.data.userId);
+        
+        // Prevent updates to messages
+        allow update: if false;
+      }
+    }
+    
+    // User profiles
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && isOwner(userId);
+      allow update: if isSignedIn() && (isOwner(userId) || isAdmin());
+    }
+    
+    // Deny all other reads/writes
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

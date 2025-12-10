@@ -329,6 +329,7 @@ blockquote {
     height: 44px;
     background: transparent;
     border: none;
+    cursor: none;
     box-shadow: none;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;

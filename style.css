@@ -255,7 +255,8 @@ input[type="search"]:focus {
 
 .books-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  /* Slightly smaller min-width for better cover fit */
   gap: 2rem;
   min-height: 50vh
 }
@@ -270,7 +271,9 @@ input[type="search"]:focus {
   display: flex;
   flex-direction: column;
   height: 100%;
-  isolation: isolate
+  isolation: isolate;
+  overflow: hidden;
+  /* Keeps image inside rounded corners */
 }
 
 .book-card:hover {
@@ -279,16 +282,48 @@ input[type="search"]:focus {
   border-color: var(--accent)
 }
 
-.book-emoji {
-  font-size: 3.5rem;
+/* --- New Styles for Image/Emoji Logic --- */
+.book-visual {
+  height: 180px;
+  /* Fixed height for consistency */
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 1rem;
+  background: var(--bg-body);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.book-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Ensures image fills area without distortion */
+  transition: transform 0.3s ease;
+}
+
+.book-card:hover .book-cover {
+  transform: scale(1.05);
+}
+
+.book-emoji {
+  font-size: 4rem;
   filter: drop-shadow(0 4px 6px rgb(0 0 0 / .1));
-  transition: transform 0.2s
+  transition: transform 0.2s;
+  line-height: 1;
 }
 
 .book-card:hover .book-emoji {
-  transform: scale(1.05) rotate(-5deg)
+  transform: scale(1.1) rotate(-5deg);
 }
+
+.book-cover+.book-emoji {
+  display: none;
+}
+
+/* ---------------------------------------- */
 
 .book-title {
   font-family: var(--font-heading);
@@ -358,7 +393,9 @@ input[type="search"]:focus {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s
+  transition: all 0.2s;
+  box-shadow: var(--shadow-sm);
+  /* Added for better visibility over images */
 }
 
 .favorite-btn:hover {
@@ -459,13 +496,19 @@ input[type="search"]:focus {
   color: var(--text-primary)
 }
 
-@media (max-width:968px) {
+@media (max-width: 968px) {
   .app-layout {
     grid-template-columns: 1fr
   }
   
   .sidebar {
-    display: none
+    position: static;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding: 0;
+    /* Fixed the display:none/block conflict */
+    display: block;
   }
   
   .mobile-header {
@@ -485,20 +528,12 @@ input[type="search"]:focus {
     font-family: var(--font-heading)
   }
   
-  .sidebar {
-    display: block;
-    position: static;
-    height: auto;
-    border-right: none;
-    border-bottom: 1px solid var(--border);
-    padding: 0
-  }
-  
   .sidebar-sticky {
     padding: 1rem;
     gap: 1rem
   }
   
+  /* Hide desktop specific elements */
   .sidebar-header,
   .desktop-footer {
     display: none
@@ -507,13 +542,16 @@ input[type="search"]:focus {
   .filter-group {
     flex-direction: row;
     overflow-x: auto;
-    padding-bottom: 5px
+    padding-bottom: 5px;
+    -webkit-overflow-scrolling: touch;
+    /* Smooth scrolling on iOS */
   }
   
   .filter-chip {
     white-space: nowrap;
     width: auto;
-    border: 1px solid var(--border)
+    border: 1px solid var(--border);
+    flex-shrink: 0;
   }
   
   .main-content {
